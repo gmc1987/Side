@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <beans xmlns="http://www.springframework.org/schema/beans"  
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"  
+        xmlns:context="http://www.springframework.org/schema/context" 
+        xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xmlns:util="http://www.springframework.org/schema/util"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+ 	
+	<context:annotation-config />  
+ 	<!-- <mvc:annotation-driven /> -->
+       <!-- 把标记了@Controller注解的类转换为bean -->  
+      <context:component-scan base-package="com.tssa" />  
+  <!-- 启动Spring MVC的注解功能，完成请求和注解POJO的映射 -->  
+  
+  	  <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+  
+      <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+      	<property name="messageConverters">  
+                   <util:list id="beanList">   
+                     <ref bean="mappingJacksonHttpMessageConverter"/>   
+                     <ref bean="stringHttpMessageConverter"/> 
+                   </util:list>   
+        </property>  
+      </bean>  
+      
+      <bean id="mappingJacksonHttpMessageConverter"  
+        class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">  
+     	 <property name="supportedMediaTypes">  
+            <list>  
+             <!-- <value>application/json;charset=UTF-8</value> -->
+         	 <value>text/html;charset=UTF-8</value>
+            </list>  
+        </property>
+    </bean>
+    
+    <bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+    	<property name="supportedMediaTypes">
+    		<list>
+    			<value>text/html;charset=UTF-8</value>
+    			<!-- <value>application/json;charset=UTF-8</value> -->
+    		</list>
+    	</property>
+    </bean>  
+     
+       <!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->  
+   	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"  
+          p:prefix="/WEB-INF/view/" p:suffix=".jsp" />  
+          
+       <!-- <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="mediaTypes">
+            <map>
+                <entry key="json" value="application/json" />
+            </map>
+        </property>
+        <property name="defaultViews">
+            <list>
+                <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
+            </list>
+        </property>
+       </bean>   -->
+          
+       <bean id="multipartResolver"  
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver"  
+          p:defaultEncoding="UTF-8" />  
+          
+       <!-- 拦截器 -->
+		<mvc:interceptors>
+			<mvc:interceptor>
+				<mvc:mapping path="/user/toList" />
+				<mvc:mapping path="/user/getRole" />
+				<mvc:mapping path="/user/list" />
+				<mvc:mapping path="/user/save" />
+				<mvc:mapping path="/user/update" />
+				<mvc:mapping path="/user/delete" />
+				<mvc:mapping path="/businessCustomer/toList" />
+				<mvc:mapping path="/businessCustomer/getRole" />
+				<mvc:mapping path="/businessCustomer/list" />
+				<mvc:mapping path="/businessCustomer/save" />
+				<mvc:mapping path="/businessCustomer/update" />
+				<mvc:mapping path="/businessCustomer/delete" />
+				<mvc:mapping path="/app_version/**" />
+				<mvc:mapping path="/base/**" />
+				<mvc:mapping path="/businessCommissionSetting/**" />
+				<mvc:mapping path="/cooperation/**" />
+				<mvc:mapping path="/cooperationProduct/**" />
+				<mvc:mapping path="/productTypes/**" />
+				<mvc:mapping path="/customer/**" />
+				<mvc:mapping path="/location/**" />
+				<mvc:mapping path="/member/**" />
+				<mvc:mapping path="/menu/**" />
+				<mvc:mapping path="/hotelOrder/**" />
+				<mvc:mapping path="/order/**" />
+				<mvc:mapping path="/restaurantOrder/**" />
+				<mvc:mapping path="/options/**" />
+				<mvc:mapping path="/role/**" />
+				<mvc:mapping path="/job/**" />
+				<mvc:mapping path="/suitType/**" />
+				<bean class="com.tssa.commons.interceptors.UserInterceptors"/>
+			</mvc:interceptor>
+			<mvc:interceptor>
+				<mvc:mapping path="/user/toList" />
+				<mvc:mapping path="/user/getRole" />
+				<mvc:mapping path="/user/list" />
+				<mvc:mapping path="/user/save" />
+				<mvc:mapping path="/user/update" />
+				<mvc:mapping path="/user/delete" />
+				<mvc:mapping path="/businessCustomer/toList" />
+				<mvc:mapping path="/businessCustomer/getRole" />
+				<mvc:mapping path="/businessCustomer/list" />
+				<mvc:mapping path="/businessCustomer/save" />
+				<mvc:mapping path="/businessCustomer/update" />
+				<mvc:mapping path="/businessCustomer/delete" />
+				<mvc:mapping path="/app_version/**" />
+				<mvc:mapping path="/base/**" />
+				<mvc:mapping path="/businessCommissionSetting/**" />
+				<mvc:mapping path="/cooperation/**" />
+				<mvc:mapping path="/cooperationProduct/**" />
+				<mvc:mapping path="/productTypes/**" />
+				<mvc:mapping path="/customer/**" />
+				<mvc:mapping path="/location/**" />
+				<mvc:mapping path="/member/**" />
+				<mvc:mapping path="/menu/**" />
+				<mvc:mapping path="/hotelOrder/**" />
+				<mvc:mapping path="/order/**" />
+				<mvc:mapping path="/restaurantOrder/**" />
+				<mvc:mapping path="/options/**" />
+				<mvc:mapping path="/role/**" />
+				<mvc:mapping path="/job/**" />
+				<mvc:mapping path="/suitType/**" />
+				<bean class="com.tssa.commons.interceptors.BusinessInterceptors"/>
+			</mvc:interceptor> 
+		</mvc:interceptors>
+ </beans>

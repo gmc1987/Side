@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd"> 
+			
+	<context:annotation-config />
+	<context:component-scan base-package="com.tssa" />  <!-- 自动扫描所有注解该路径 -->
+
+	<context:property-placeholder location="classpath:/hibernate.properties" />
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${dataSource.dialect}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${dataSource.hbm2ddl.auto}</prop>
+				<prop key="hibernate.show_sql">${dataSource.show_sql}</prop>
+				<!-- <prop key="hibernate.hbm2ddl.auto">update</prop> -->
+			</props>
+		</property>
+		<property name="packagesToScan">
+			<list>
+				<value>com.tssa.adminUsers.pojo</value><!-- 扫描实体类，也就是平时所说的model -->
+				<value>com.tssa.businessUser.pojo</value>
+				<value>com.tssa.menus.pojo</value>
+				<value>com.tssa.options.pojo</value>
+				<value>com.tssa.role.pojo</value>
+				<value>com.tssa.customer.pojo</value>
+				<value>com.tssa.cooperationBusiness.pojo</value>
+				<value>com.tssa.base.pojo</value>
+				<value>com.tssa.myOrders.pojo</value>
+				<value>com.tssa.commissionSetting.pojo</value>
+				<value>com.tssa.location.pojo</value>
+				<value>com.tssa.appVersion.pojo</value>
+				<value>com.tssa.member.pojo</value>
+				<value>com.tssa.sysBulletin.pojo</value>
+				<value>com.tssa.suit.pojo</value>
+			</list>
+	   </property>
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${dataSource.driverClassName}" />
+		<property name="url" value="${dataSource.url}" />
+		<property name="username" value="${dataSource.username}" />
+		<property name="password" value="${dataSource.password}" />
+	</bean>
+	
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<tx:annotation-driven mode="aspectj"/>
+	
+    <aop:aspectj-autoproxy/>  
+			
+</beans>

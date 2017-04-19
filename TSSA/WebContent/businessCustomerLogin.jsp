@@ -1,0 +1,1 @@
+<% response.sendRedirect(request.getContextPath() + "/businessCustomer/toBusinessCustomerLogin.do?userLogin=1");  %>

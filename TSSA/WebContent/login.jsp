@@ -1,0 +1,1 @@
+<% response.sendRedirect(request.getContextPath() + "/user/toLogin.do?userLogin=0");  %>
