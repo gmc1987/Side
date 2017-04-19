@@ -23,7 +23,6 @@ Ext.onReady(function(){
 	var businessCustomerLoginForm = new Ext.FormPanel({
 		labelWidth : 80, 
 		frame : true,
-		title : '商户登录',
 		labelAlign : 'right',
 		buttonAlign : 'center',
 		bodyStyle : 'padding:5px 5px 0',
@@ -85,39 +84,103 @@ Ext.onReady(function(){
 			}]
 	});
 	
-	var showLoginButton = new Ext.Button({
-		id : 'loginButton',
-		text : '登录',
-		width:'80%',
-		height:30
+	var businessCustomerResetForm = new Ext.FormPanel({
+		labelWidth : 80, 
+		frame : true,
+		labelAlign : 'right',
+		buttonAlign : 'center',
+		bodyStyle : 'padding:5px 5px 0',
+		items : [{
+			layout : 'table',
+			border : true,
+			labelSeparator : ':',
+			defaults : {
+				bodyStyle : 'padding:1px'
+			},
+			layoutConfig : {
+				columns : 1
+			},
+			items:[{
+				layout : 'form',
+				border : true,
+				items:[{
+					xtype : 'textfield',
+					fieldLabel : '员工编码',
+					name : 'loginID',
+					width : 215,
+					maxLength:100,
+					maxLengthText:'最大字符长度不能超过:{0},(注:每个中文字符长度为2)',
+					allowBlank : false,
+			    	blankText : '员工编码不能为空'
+					}]
+				}]
+			}],
+			buttons : [{
+				text : '重置密码',
+				handler : function(){
+					businessCustomerLoginForm.form.submit({
+						url : '${ctx}/businessCustomer/resetPassword.do',
+						method : 'POST',
+						success : function(form,action){
+								loginWin.hide();
+								window.location.href = '${ctx}' + action.result.msg;
+						},
+						failure : function(form,action){
+								Ext.MessageBox.alert("提示",action.result.msg);
+								loginWin.hide();
+						}
+					});
+				}
+			}]
 	});
 	
-	var showResetPWDButton = new Ext.Button({
-		id : 'resetPwdButton',
-		text : '忘记密码',
-		width:'80%',
-		height:30
+	var loginButton = new Ext.Button({
+		id : 'loginButton',
+		text : '登录/重置密码',
+		arrowAlign : 'right',
+		menuAlign : 'tl-bl',
+		menu : [
+		        { text: "登录", handler : function(){
+		        	if(!loginWin){
+		    			loginWin = new Ext.Window({
+		    				el : 'loginDiv',
+		    				layout : 'fit',
+		    				title : '商户登录',
+		    				closeAction : 'hide',
+		    				width : 380,
+		    				height : 152,
+		    				modal : true,
+		    				constrain : true,
+		    				resizable : false,
+		    				items : businessCustomerLoginForm
+		    			});
+		    		}
+		    		businessCustomerLoginForm.getForm().reset();
+		    		loginWin.show(this);
+		        }},
+		        { text: "重置密码", handler : function(){
+		        	if(!resetPasswordWin){
+		        		resetPasswordWin = new Ext.Window({
+		    				el : 'resetDiv',
+		    				layout : 'fit',
+		    				title : '重置密码',
+		    				closeAction : 'hide',
+		    				width : 380,
+		    				height : 120,
+		    				modal : true,
+		    				constrain : true,
+		    				resizable : false,
+		    				items : businessCustomerResetForm
+		    			});
+		    		}
+		        	businessCustomerResetForm.getForm().reset();
+		    		resetPasswordWin.show(this);
+		        }}
+		]
 	});
 	
 	var loginWin = null;
-	showLoginButton.on('click', function(){
-		if(!loginWin){
-			loginWin = new Ext.Window({
-				el : 'loginDiv',
-				layout : 'fit',
-				closeAction : 'hide',
-				width : 380,
-				height : 165,
-				modal : true,
-				collapsible : true,
-				constrain : true,
-				resizable : false,
-				items : businessCustomerLoginForm
-			});
-		}
-		businessCustomerLoginForm.getForm().reset();
-		loginWin.show(this);
-	});
+	var resetPasswordWin = null;
 	
 	var headPanel = new Ext.Panel({
 		region : 'north',
@@ -134,36 +197,12 @@ Ext.onReady(function(){
 		},{
 			xtype : 'panel',
             itemId: 'loginPanel',
-            layout: "column",
+            layout: 'fit',
             width : '20%',
             height : 150,
             region : 'center',
-            defaults: {
-                // 对每一个子面板都有效applied to each contained panel
-                bodyStyle:'padding:25px 25px 25px 30px;'
-            },
-            items: [{
-                width: '100%',
-                items:[{
-                	items : [showLoginButton]
-                },{
-                	items : [showResetPWDButton]
-                }]
-            }]
-		/* items: [{
-        	region : 'north',
-        	height : 75,
-        	margins: '0 0 0 5',
-            cmargins: '5 5 0 5',
-        	items : [showLoginButton]
-        },{
-        	region : 'center',
-            height : 75,
-            margins: '0 0 0 5',
-            cmargins: '5 5 0 5',
-            items : [showResetPWDButton]
-        }] */
- //          }
+            items : [loginButton]
+ //       }
 		}]
 	});
 	
@@ -189,5 +228,6 @@ Ext.onReady(function(){
 <div id="headDiv"></div>
 <div id="contentDiv"></div>
 <div id="loginDiv"></div>
+<div id="resetDiv"></div>
 </body>
 </html>
