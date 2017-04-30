@@ -62,6 +62,9 @@ public class BusinessCustomer implements Serializable {
 	@Column(length=32)
 	private String createUser;
 	
+	@Column(length=32)
+	private String createUserCode;
+	
 	@Column
 	private Integer status;
 
@@ -143,5 +146,13 @@ public class BusinessCustomer implements Serializable {
 
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+
+	public String getCreateUserCode() {
+		return createUserCode;
+	}
+
+	public void setCreateUserCode(String createUserCode) {
+		this.createUserCode = createUserCode;
 	}
 }

@@ -36,4 +36,17 @@ public class BusinessCustomerService extends
 		}
 	}
 	
+	/**
+	 * 重置密码
+	 * @param loginId
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean businessCustomerResetPassword(String loginId) throws Exception{
+		
+		boolean flag = false;
+		
+		return flag;
+	}
+	
 }

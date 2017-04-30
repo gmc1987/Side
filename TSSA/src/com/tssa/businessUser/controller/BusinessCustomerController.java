@@ -93,8 +93,9 @@ public class BusinessCustomerController {
 		
 		ModelMap map = new ModelMap();
 		PageMode<BusinessCustomer> pageModel = null;
-		String businessCode = request.getParameter("businessCode");
-		String businessName = request.getParameter("businessName");
+		String businessCode = request.getParameter("userCode");
+		String businessName = request.getParameter("userName");
+		String roleId = request.getParameter("role");
 		String businessStatus = request.getParameter("businessStatus");
 		String start = request.getParameter("start");
 		String limit = request.getParameter("limit");
@@ -126,6 +127,11 @@ public class BusinessCustomerController {
 		
 		if(businessStatus != null && !"".equals(businessStatus)){
 			criteria.add(Restrictions.eq("status", businessStatus));
+		}
+		
+		if(roleId != null && !"".equals(roleId)){
+			Role role = roleService.get(Role.class, roleId);
+			criteria.add(Restrictions.eq("rid", role));
 		}
 		
 		pageModel = businessCustomerService.findForList(criteria, pageNumber, pageSize);
@@ -187,9 +193,9 @@ public class BusinessCustomerController {
 			}
 			
 			BusinessCustomer businessCustomer = new BusinessCustomer();
-			businessCustomer.setBusinessCustomerCode(businessCustomerCode);
 			businessCustomer.setBusinessCustomerName(businessCustomerName);
 			businessCustomer.setMobilePhone(mobilePhone);
+			businessCustomer.setCreateUserCode(user.getUserCode());
 			if(businessCustomerStatus != null && !"".equals(businessCustomerStatus)){
 				businessCustomer.setStatus(Integer.parseInt(businessCustomerStatus));
 			}else{
@@ -201,8 +207,9 @@ public class BusinessCustomerController {
 				businessCustomer.setCreateUser(sessionbusinessCustomer.getBusinessCustomerName());
 			}else{
 				businessCustomer.setCreateUser(user.getUserName());
+				businessCustomer.setBusinessCustomerCode(businessCustomerCode);
 			}
-			businessCustomer.setPassword(UtilMD5.MD5(password));
+			businessCustomer.setPassword(password);
 			
 			if(role != null){
 				businessCustomer.setRid(role);
@@ -355,6 +362,16 @@ public class BusinessCustomerController {
 			map.putAll(result);
 			return map;
 		}
+	}
+	
+	@RequestMapping(value="/reset", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> reset(@RequestParam(value="loginId") String loginId, HttpServletRequest request){
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		
+		return resultMap;
 	}
 	
 	@RequestMapping("/toIndex")
