@@ -20,6 +20,9 @@
 <script type="text/javascript">
 Ext.onReady(function(){
 	
+	var loginWin = null;
+	var resetPasswordWin = null;
+	
 	var businessCustomerLoginForm = new Ext.FormPanel({
 		labelWidth : 80, 
 		frame : true,
@@ -109,25 +112,33 @@ Ext.onReady(function(){
 					name : 'loginID',
 					width : 215,
 					maxLength:100,
-					maxLengthText:'最大字符长度不能超过:{0},(注:每个中文字符长度为2)',
+					maxLengthText:'最大字符长度不能超过:{0}个字符(注:每个中文字符长度为2)',
 					allowBlank : false,
 			    	blankText : '员工编码不能为空'
+					},{
+						xtype : 'textarea',
+						fieldLabel : '申请备注',
+						name : 'remark',
+						width : 215,
+						height : 50,
+						maxLength : 200,
+						maxLengthText : '最多不能输出超过:{0}个字符(注:每个中文字符长度为2)'
 					}]
 				}]
 			}],
 			buttons : [{
 				text : '重置密码',
 				handler : function(){
-					businessCustomerLoginForm.form.submit({
-						url : '${ctx}/businessCustomer/resetPassword.do',
+					businessCustomerResetForm.form.submit({
+						url : '${ctx}/pwdReset/addRecord.do',
 						method : 'POST',
 						success : function(form,action){
-								loginWin.hide();
-								window.location.href = '${ctx}' + action.result.msg;
+								Ext.MessageBox.alert("提示",action.result.msg);
+								resetPasswordWin.hide();
 						},
 						failure : function(form,action){
 								Ext.MessageBox.alert("提示",action.result.msg);
-								loginWin.hide();
+								resetPasswordWin.hide();
 						}
 					});
 				}
@@ -166,7 +177,7 @@ Ext.onReady(function(){
 		    				title : '重置密码',
 		    				closeAction : 'hide',
 		    				width : 380,
-		    				height : 120,
+		    				height : 180,
 		    				modal : true,
 		    				constrain : true,
 		    				resizable : false,
@@ -178,9 +189,6 @@ Ext.onReady(function(){
 		        }}
 		]
 	});
-	
-	var loginWin = null;
-	var resetPasswordWin = null;
 	
 	var headPanel = new Ext.Panel({
 		region : 'north',

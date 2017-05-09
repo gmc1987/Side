@@ -49,4 +49,6 @@ public class BusinessCustomerService extends
 		return flag;
 	}
 	
+//	public boolean addResetRecord()
+	
 }

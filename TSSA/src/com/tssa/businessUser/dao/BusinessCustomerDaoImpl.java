@@ -3,6 +3,8 @@
  */
 package com.tssa.businessUser.dao;
 
+import org.springframework.stereotype.Repository;
+
 import com.tssa.common.dao.HibernateEntitryDaoImpl;
 
 /**

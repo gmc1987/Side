@@ -35,7 +35,6 @@ import com.tssa.businessUser.service.BusinessCustomerService;
 import com.tssa.common.mode.DetachedCriteriaTS;
 import com.tssa.common.mode.PageMode;
 import com.tssa.common.util.TSSAUtil;
-import com.tssa.common.util.UtilMD5;
 import com.tssa.cooperationBusiness.pojo.CooperationBusiness;
 import com.tssa.cooperationBusiness.service.CooperationService;
 import com.tssa.role.pojo.Role;
@@ -43,7 +42,7 @@ import com.tssa.role.service.RoleService;
 
 @Controller
 @RequestMapping("/businessCustomer")
-@SessionAttributes(value={"businessCustomer"}, types={BusinessCustomer.class})
+@SessionAttributes(value={"businessCustomer","user"}, types={BusinessCustomer.class,Users.class})
 public class BusinessCustomerController {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(BusinessCustomerController.class);
@@ -364,9 +363,9 @@ public class BusinessCustomerController {
 		}
 	}
 	
-	@RequestMapping(value="/reset", method=RequestMethod.POST)
+	@RequestMapping(value="/resetPassword", method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> reset(@RequestParam(value="loginId") String loginId, HttpServletRequest request){
+	public Map<String, Object> resetPassword(@RequestParam(value="loginId") String loginId, HttpServletRequest request){
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
