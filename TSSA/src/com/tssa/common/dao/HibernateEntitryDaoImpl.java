@@ -21,9 +21,8 @@ import com.tssa.common.mode.PageMode;
 
 /**
  * @author gmc
- *
+ * 
  */
-
 public class HibernateEntitryDaoImpl  extends HibernateDaoSupport implements HibernateEntitryDao {
 	
 	private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(HibernateEntitryDaoImpl.class);
@@ -97,9 +96,10 @@ public class HibernateEntitryDaoImpl  extends HibernateDaoSupport implements Hib
 	@Transactional
 	public <T> void saveOrUpdateAll(Collection<T> entities) {
 		if (entities != null && entities.size() > 0) {
-			for (T t : entities) {
-				getHibernateTemplate().saveOrUpdate(t);
-			}
+//			for (T t : entities) {
+//				getHibernateTemplate().saveOrUpdate(t);
+//			}
+			getHibernateTemplate().saveOrUpdateAll(entities);
 		}
 	}
 	
@@ -119,9 +119,10 @@ public class HibernateEntitryDaoImpl  extends HibernateDaoSupport implements Hib
 	@Transactional
 	public <T> void deleteAll(Collection<T> entities) {
 		if (entities != null && entities.size() > 0) {
-			for (T t : entities) {
-				getHibernateTemplate().delete(t);
-			}
+//			for (T t : entities) {
+//				getHibernateTemplate().delete(t);
+//			}
+			getHibernateTemplate().deleteAll(entities);
 		}
 	}
 	
@@ -183,6 +184,13 @@ public class HibernateEntitryDaoImpl  extends HibernateDaoSupport implements Hib
 	@Override
 	public <T> T find(DetachedCriteriaTS<T> criteria) {
 		return (T) criteria.getExecutableCriteria(getSession()).setMaxResults(1).uniqueResult();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> List<T> findAll(DetachedCriteriaTS<T> detachedCriteria) {
+		Criteria criteria = detachedCriteria.getExecutableCriteria(getSession());
+		return criteria.list();
 	}
 	
 }

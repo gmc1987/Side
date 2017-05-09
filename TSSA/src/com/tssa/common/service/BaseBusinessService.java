@@ -41,6 +41,15 @@ public class BaseBusinessService<T> {
 	public void update(T entity){
 		hibernateEntitryDao.saveOrUpdate(entity);
 	}
+	
+	/**
+	 * 批量更新
+	 * @param list
+	 */
+	@Transactional
+	public void updateAll(List<T> list){
+		hibernateEntitryDao.saveOrUpdateAll(list);
+	}
 	/**
 	 * 删除
 	 * @param entity
@@ -48,6 +57,15 @@ public class BaseBusinessService<T> {
 	@Transactional
 	public void delete(T entity){
 		hibernateEntitryDao.delete(entity);
+	}
+	
+	/**
+	 * 批量删除
+	 * @param list
+	 */
+	@Transactional
+	public void deleteAll(List<T> list){
+		hibernateEntitryDao.deleteAll(list);
 	}
 	
 	/**
@@ -78,6 +96,15 @@ public class BaseBusinessService<T> {
 	 */
 	public <T> List<T> find(DetachedCriteriaTS<T> detachedCriteria, int maxResult){
 		return hibernateEntitryDao.find(detachedCriteria, maxResult);
+	}
+	
+	/**
+	 * 查询所有符合条件记录
+	 * @param detachedCriteria
+	 * @return
+	 */
+	public <T> List<T> findAll(DetachedCriteriaTS<T> detachedCriteria){
+		return hibernateEntitryDao.findAll(detachedCriteria);
 	}
 	
 	/**

@@ -49,6 +49,13 @@ public interface HibernateEntitryDao {
 	public <T> List<T> find(DetachedCriteriaTS<T> detachedCriteria, int maxResult);
 	
 	/**
+	 * 查询所有符合条件记录
+	 * @param detachedCriteria
+	 * @return
+	 */
+	public <T> List<T> findAll(DetachedCriteriaTS<T> detachedCriteria);
+	
+	/**
 	 * 保存一个对象
 	 * @param obj
 	 */
