@@ -277,6 +277,11 @@ Ext.onReady(function(){
 	resetBtn.on('click', function(){
 		if(gridForm.getSelectionModel().hasSelection()){
 			var record = gridForm.getSelectionModel().getSelected();
+			var serialStatus = record.get("serialStatus");
+			if(serialStatus == "1"){
+				Ext.Msg.alert("错误", "记录已审批");
+				return;
+			}
 			if(!resetWin){
 				resetWin = new Ext.Window({
 					el : 'resetWin',

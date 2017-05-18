@@ -101,7 +101,11 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	  
-	  <bean id="custSuitDao" class="com.tssa.suit.dao.CustSuitDaoImpl">
+	<bean id="custSuitDao" class="com.tssa.suit.dao.CustSuitDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean id="businessCustomerResetRecordDao" class="com.tssa.businessUser.dao.BusinessCustomerResetRecordDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 </beans>
