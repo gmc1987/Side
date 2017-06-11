@@ -22,4 +22,11 @@ public interface MenuDao extends HibernateEntitryDao {
 	 */
 	public List<Menu> findMenusInfo(DetachedCriteriaTS<Menu> detachedCriteria);
 	
+	/**
+	 * 查询菜单信息
+	 * @param sql
+	 * @return
+	 */
+	public List<Menu> findMenuBySQL(String sql, List<String> params);
+	
 }

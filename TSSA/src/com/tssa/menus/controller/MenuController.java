@@ -73,6 +73,7 @@ public class MenuController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		DetachedCriteriaTS<Menu> menuCriteria = new DetachedCriteriaTS<Menu>(Menu.class);
 		menuCriteria.add(Restrictions.isNull("parentIds"));
+		menuCriteria.addOrder(Order.asc("menuOrder"));
 		menus = menuService.findMenusInfo(menuCriteria);
 		//过滤字段对象
 		JsonConfig config = new JsonConfig();
@@ -133,44 +134,55 @@ public class MenuController {
 		Users user = (Users)request.getSession().getAttribute("user");
 		BusinessCustomer businessCustomer = (BusinessCustomer)request.getSession().getAttribute("businessCustomer");
 		
-		DetachedCriteriaTS<Menu> menuCriteria = new DetachedCriteriaTS<Menu>(Menu.class);
-		if("root".equals(parentId)){
-			menuCriteria.add(Restrictions.isNull("parentIds"));
-		}else{
-			Menu parentMenu = null;
-			DetachedCriteriaTS<Menu> parentCriteria = new DetachedCriteriaTS<Menu>(Menu.class);
-			parentCriteria.add(Restrictions.eq("mid", parentId));
-			parentMenu = menuService.find(parentCriteria);
-			menuCriteria.add(Restrictions.eq("parentIds", parentMenu));
-		}
-		List<Map<String, Object>> menuTrees = menuService.getMenuTree(menuCriteria);
-		List<Map<String,String>> roleOptions = null;
-		if(user != null){
-			roleOptions = roleService.findRoleOption(user.getRid().getRoleId());
-		}
-		if(businessCustomer != null){
-			roleOptions = roleService.findRoleOption(businessCustomer.getRid().getRoleId());
-		}
-		List<Map<String, Object>> trees = new ArrayList<Map<String, Object>>();
+//		DetachedCriteriaTS<Menu> menuCriteria = new DetachedCriteriaTS<Menu>(Menu.class);
+//		if("root".equals(parentId)){
+//			menuCriteria.add(Restrictions.isNull("parentIds"));
+//		}else{
+//			Menu parentMenu = null;
+//			DetachedCriteriaTS<Menu> parentCriteria = new DetachedCriteriaTS<Menu>(Menu.class);
+//			parentCriteria.add(Restrictions.eq("mid", parentId));
+//			parentMenu = menuService.find(parentCriteria);
+//			menuCriteria.add(Restrictions.eq("parentIds", parentMenu));
+//		}
+//		menuCriteria.addOrder(Order.asc("menuOrder"));
 		
-		for(Map<String,Object> treeMenu : menuTrees){
-			String mid = (String)treeMenu.get("id");//菜单树ID
-			for(Map<String,String> roleTree : roleOptions){
-				String treeId = roleTree.get("mid");//角色菜单ID
-				DetachedCriteriaTS<Menu> treeCriteria = new DetachedCriteriaTS<Menu>(Menu.class);
-				treeCriteria.add(Restrictions.eq("mid", treeId));
-				Menu roleMenu = menuService.find(treeCriteria);
-				if(mid.equals(roleMenu.getParentIds().getMid())){
-					trees.add(treeMenu);
-					break;
-				}
-				if(mid.equals(roleMenu.getMid())){
-					trees.add(treeMenu);
-					break;
-				}
-			}
+		String roleId = null;
+		
+		if(user != null){
+			roleId = user.getRid().getRoleId();
+		}else{
+			roleId = businessCustomer.getRid().getRoleId();
 		}
-		return trees;
+		
+		List<Map<String, Object>> menuTrees = menuService.getMenuTree(parentId, roleId);
+//		List<Map<String,String>> roleOptions = null;
+//		if(user != null){
+//			roleOptions = roleService.findRoleOption(user.getRid().getRoleId());
+//		}
+//		if(businessCustomer != null){
+//			roleOptions = roleService.findRoleOption(businessCustomer.getRid().getRoleId());
+//		}
+//		List<Map<String, Object>> trees = new ArrayList<Map<String, Object>>();
+//		
+//		for(Map<String,Object> treeMenu : menuTrees){
+//			String mid = (String)treeMenu.get("id");//菜单树ID
+//			for(Map<String,String> roleTree : roleOptions){
+//				String treeId = roleTree.get("mid");//角色菜单ID
+//				DetachedCriteriaTS<Menu> treeCriteria = new DetachedCriteriaTS<Menu>(Menu.class);
+//				treeCriteria.add(Restrictions.eq("mid", treeId));
+//				Menu roleMenu = menuService.find(treeCriteria);
+//				if(mid.equals(roleMenu.getParentIds().getMid())){
+//					trees.add(treeMenu);
+//					break;
+//				}
+//				if(mid.equals(roleMenu.getMid())){
+//					trees.add(treeMenu);
+//					break;
+//				}
+//			}
+//		}
+//		return trees;
+		return menuTrees;
 	}
 	
 	@RequestMapping("/list")
@@ -183,6 +195,8 @@ public class MenuController {
 		int pageSize = 0;
 		
 		DetachedCriteriaTS<Menu> menuCriteria = new DetachedCriteriaTS<Menu>(Menu.class);
+		menuCriteria.addOrder(Order.asc("parentIds"));
+		menuCriteria.addOrder(Order.asc("menuOrder"));
 		if(start != null && !"".equals(start) && !"0".equals(start)){
 			pageNumber = Integer.parseInt(start);
 		}
@@ -191,7 +205,6 @@ public class MenuController {
 		}else{
 			pageSize = 10;
 		}
-		
 		pageMode = menuService.findForList(menuCriteria, pageNumber, pageSize);
 		JsonConfig config = new JsonConfig();
 		config.setJsonPropertyFilter(new PropertyFilter(){

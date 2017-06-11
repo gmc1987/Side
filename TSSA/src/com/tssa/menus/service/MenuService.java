@@ -40,10 +40,27 @@ public class MenuService extends BaseBusinessService<Menu> {
 	 * @param detachedCriteria
 	 * @return
 	 */
-	public List<Map<String, Object>> getMenuTree(DetachedCriteriaTS<Menu> detachedCriteria){
+	public List<Map<String, Object>> getMenuTree(String menuId, String roleId){
 		List<Map<String, Object>> menus = new ArrayList<Map<String, Object>>();
+		List<String> params = new ArrayList<String>();
+		params.add(roleId);
+		String selSql = "select a.mid, a.menuName, a.menuUrl, a.parentId from SYSTEM_MENU a";
+		if("root".equals(menuId)){
+			selSql += " left join SYSTEM_MENU c on a.mid=c.parentId";
+		}else{
+			selSql += " inner join SYSTEM_MENU c on a.parentId=c.mid";
+		}
+		selSql += " left join MANAGER_ROLE_MENU_OPTION b";
+		if("root".equals(menuId)){
+			selSql += " on c.mid=b.mid where b.rid=? group by a.mid, a.menuName, a.menuUrl, a.parentId";
+		}else{
+			params.add(menuId);
+			selSql += " on a.mid = b.mid where b.rid=? and a.parentId=? group by a.mid, a.menuName, a.menuUrl";
+		}
+		selSql += " order by a.menuOrder asc";
 		
-		List<Menu> list = menuDao.findMenusInfo(detachedCriteria);
+		
+		List<Menu> list = menuDao.findMenuBySQL(selSql, params);
 		for(Menu menu : list){
 			Map<String, Object> myMenu = new HashMap<String, Object>();
 			myMenu.put("id", menu.getMid());
@@ -56,7 +73,6 @@ public class MenuService extends BaseBusinessService<Menu> {
 				myMenu.put("parentId", "");
 			}
 			if(menu.getParentIds() != null || (menu.getMenuUrl() != null && !"".equals(menu.getMenuUrl()))){
-				
 				myMenu.put("leaf", true);
 				myMenu.put("cls", "file");
 			}else{
