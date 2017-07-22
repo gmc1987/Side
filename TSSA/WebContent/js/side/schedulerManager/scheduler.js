@@ -4,19 +4,19 @@ Ext.onReady(function(){
 	var addJobBtn = new Ext.Button({
 		text : '新增',
 		cls: 'x-btn-text-icon scroll-bottom', 
-		icon: ctx+'/images/icon/Nuvola/16/actions/edit-add.png',
+		icon: ctx+'/images/icon/Nuvola/16/actions/edit-add.png'
 	});
 
 	var modBtn = new Ext.Button({
 		text : '修改',
 		cls: 'x-btn-text-icon scroll-bottom', 
-		icon: ctx+'/images/icon/Nuvola/16/actions/edit-editor.png',
+		icon: ctx+'/images/icon/Nuvola/16/actions/edit-editor.png'
 	});
 
 	var delBtn = new Ext.Button({
 		text : '删除',
 		cls: 'x-btn-text-icon scroll-bottom', 
-		icon: ctx+'/images/icon/Nuvola/16/actions/edit-delete.png',
+		icon: ctx+'/images/icon/Nuvola/16/actions/edit-delete.png'
 	});
 	
   	var store = new Ext.data.JsonStore({ 

@@ -108,4 +108,13 @@
 	<bean id="businessCustomerResetRecordDao" class="com.tssa.businessUser.dao.BusinessCustomerResetRecordDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
+	
+	<bean id="iAllocateSeatNumberRecordDao" class="com.tssa.allocateSeats.dao.IAllocateSeatNumberRecordDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean id="iAllocateSeatTypeSetDao" class="com.tssa.allocateSeats.dao.IAllocateSeatTypeSetDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
 </beans>

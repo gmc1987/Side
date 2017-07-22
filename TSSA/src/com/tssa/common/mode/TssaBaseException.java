@@ -20,6 +20,7 @@ public class TssaBaseException extends Exception {
 	private static final long serialVersionUID = -2977098400392383021L;
 	
 	public TssaBaseException(String msg){
+		super(msg);
 		LOG.error(msg);
 	}
 

@@ -67,7 +67,7 @@
 		<iframe id="application-info-iframe" src="" frameborder="0" style="height:100%;width:100%;border:0px none;"></iframe>
 	</div>
 </body>
-<script src="${ctx}/js/menu.js" type="text/javascript"></script>
+<%-- <script src="${ctx}/js/menu.js" type="text/javascript"></script> --%>
 <script language="javascript">
 var contentPanel = null;
 //门户页面地址

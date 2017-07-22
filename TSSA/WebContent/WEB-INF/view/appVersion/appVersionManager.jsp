@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../../../js/head.inc" %>
 <c:set var="pageNocache" value="true"></c:set>
 <c:set var="pageTitle" value="时代折扣移动支付平台"></c:set>

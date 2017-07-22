@@ -46,6 +46,7 @@
 				<value>com.tssa.member.pojo</value>
 				<value>com.tssa.sysBulletin.pojo</value>
 				<value>com.tssa.suit.pojo</value>
+				<value>com.tssa.allocateSeats.pojo</value>
 			</list>
 	   </property>
 	</bean>

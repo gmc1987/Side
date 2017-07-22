@@ -5,7 +5,7 @@ Ext.onReady(function(){
 	var resetBtn = new Ext.Button({
 		text : '重置密码',
 		cls: 'x-btn-text-icon scroll-bottom', 
-		icon: img_path_16+'/actions/edit-editor.png',
+		icon: img_path_16+'/actions/edit-editor.png'
 	});
 
 	var toolBar = new Ext.Toolbar();
