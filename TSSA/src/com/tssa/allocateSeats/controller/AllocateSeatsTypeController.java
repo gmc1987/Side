@@ -45,7 +45,7 @@ public class AllocateSeatsTypeController {
 	
 	@RequestMapping("/list")
 	public String toList(ModelMap map){
-		return "/AllocateSeatsType/allocateSeatsTypeSetManage";
+		return "/AllocateSeatsManage/allocateSeatsTypeSetManage";
 	}
 	
 	@RequestMapping("/getList")

@@ -14,7 +14,7 @@ import com.tssa.businessUser.pojo.BusinessCustomer;
 
 /**
  * @author gmc
- *
+ * @see 商户派位模块
  */
 @Controller
 @RequestMapping("/allocateSeatNumberRecord")
@@ -25,7 +25,7 @@ public class AllocateSeatNumberRecordController {
 	
 	@RequestMapping("/toList")
 	public String toList(){
-		return "";
+		return "/AllocateSeatsManage/AllocateSeatsNumberRecordManage";
 	}
 	
 	

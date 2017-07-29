@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<%@ include file="../../../js/head.inc" %>
+<%@ include file="../../js/head.inc" %>
 <c:set var="pageNocache" value="true"></c:set>
 <c:set var="pageTitle" value="时代折扣移动支付平台"></c:set>
 <c:set var="pageTree" value="true"></c:set>
 <c:set var="pageExt" value="true"></c:set>
 <c:set var="pageAjax" value="true"></c:set> 
-<%@ include file="../../../js/js.inc" %> 
+<%@ include file="../../js/js.inc" %> 
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
