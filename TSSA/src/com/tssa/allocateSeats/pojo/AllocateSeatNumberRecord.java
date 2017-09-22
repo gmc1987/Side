@@ -40,8 +40,15 @@ public class AllocateSeatNumberRecord implements Serializable {
 	@JoinColumn(name="allocateSeatType")
 	private AllocateSeatTypeSet allocateSeatType; 
 	
+	@Column(length=32, nullable=false)
+	private String custId;
+	
+	@Column(length=4, nullable=false)
+	private String recodeStatus;
+	
+	@Column
 	private Date createDate;
-
+	
 	public String getUuid() {
 		return uuid;
 	}
@@ -64,6 +71,22 @@ public class AllocateSeatNumberRecord implements Serializable {
 
 	public void setAllocateSeatType(AllocateSeatTypeSet allocateSeatType) {
 		this.allocateSeatType = allocateSeatType;
+	}
+
+	public String getCustId() {
+		return custId;
+	}
+
+	public void setCustId(String custId) {
+		this.custId = custId;
+	}
+
+	public String getRecodeStatus() {
+		return recodeStatus;
+	}
+
+	public void setRecodeStatus(String recodeStatus) {
+		this.recodeStatus = recodeStatus;
 	}
 
 	public Date getCreateDate() {

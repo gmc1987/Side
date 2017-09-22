@@ -46,8 +46,7 @@ public class CustomerRemoteController extends BaseController {
 
 	/**
 	 * 请求方式：
-	 * http://localhost:8080/TSSA/custmerRemote/Login.do?requestData={password
-	 * :234,loginName:234}
+	 * http://localhost:8080/TSSA/custmerRemote/Login.do?requestData={password:234,loginName:234}
 	 * <p>
 	 * 方法说明
 	 * </p>
@@ -118,8 +117,7 @@ public class CustomerRemoteController extends BaseController {
 	}
 
 	/**
-	 * 请求方式： http://localhost:8080/TSSA/custmerRemote/register.do?requestData={
-	 * password:234,loginName:234}
+	 * 请求方式： http://localhost:8080/TSSA/custmerRemote/register.do?requestData={password:234,loginName:234}
 	 * <p>
 	 * 方法说明
 	 * </p>

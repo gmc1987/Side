@@ -12,12 +12,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>${title}</title>
+<script type="text/javascript" src="${ctx}/js/side/AllocateSeatsNumberRecordManage/AllocateSeatsNumberRecordManage.js"></script>
+<script type="text/javascript">
+var ctx = '${ctx}';
+</script>
 </head>
 <body>
-	<div id="search_from"></div>
-	<div id="toolBar"></div>
-	<div id="dataGrid"></div>
-	<div id="addWin"></div>
-	<div id="modWin"></div>
+	<div id="allocateNumber"></div>
 </body>
 </html>

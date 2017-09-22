@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
 
 import com.tssa.adminUsers.pojo.Users;
 import com.tssa.adminUsers.service.UsersService;
@@ -111,6 +110,7 @@ public class UserController {
 		Users user = (Users)request.getSession().getAttribute("user");
 		if(user != null){
 			return "/main/Index";
+//			return "/main/index_new";
 		} else {
 			return "login";
 		}

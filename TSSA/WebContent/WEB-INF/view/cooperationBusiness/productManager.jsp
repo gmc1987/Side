@@ -988,14 +988,14 @@ Ext.onReady(function(){
 </head>
 <body>
 <div style="width: 100%; height: 100%; padding: 0,0,0,0">
-	<div id="parentProduct" style="float: left; clear: left; width: 50%; height: 100%">
+	<div id="parentProduct" style="/* float: left; clear: left;  */width: 100%; height:auto;">
 		<div id="parentToolBar"></div>
 		<div id="parentSearchFormDiv"></div>
 		<div id="parentDataGrild"></div>
 		<div id="add_menu"></div>
 		<div id="mod_menu"></div>
 	</div>
-	<div id="childProduct" style="float: left; clear: right; width: 50%; height: 100%">
+	<div id="childProduct" style="/* float: left; clear: right; */ width: 100%; height:auto;">
 		<div id="childtoolBar"></div>
 		<div id="childSearchFormDiv"></div>
 		<div id="childDataGrild"></div>

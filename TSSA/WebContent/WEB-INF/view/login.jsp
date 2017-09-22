@@ -28,12 +28,13 @@
 <!-- 扩展EasyUI图标 -->
 <link rel="stylesheet" href="${ctx}/static/style/lightmvc.css" type="text/css">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>时代移动支付平台管理平台</title>
+<title>Side移动服务平台管理平台</title>
 <script>
 
 	$(function() {
 		
 		$('#loginform').form({
+			type: 'POST',
 		    url:'${ctx}/user/login.do?isLogin=0',
 		    onSubmit : function() {
 		    	progressLoad();

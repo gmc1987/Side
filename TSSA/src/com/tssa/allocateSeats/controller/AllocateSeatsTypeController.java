@@ -50,7 +50,9 @@ public class AllocateSeatsTypeController {
 	
 	@RequestMapping("/getList")
 	@ResponseBody
-	public PageMode<AllocateSeatTypeSet> list(String start, String limit, String businessCustomerCode){
+	public PageMode<AllocateSeatTypeSet> list(HttpServletRequest request, String start, String limit){
+		
+		BusinessCustomer businessCustomer = (BusinessCustomer) request.getSession().getAttribute("businessCustomer");
 		
 		int pageNumber = 1;
 		int pageSize = 0;
@@ -65,8 +67,8 @@ public class AllocateSeatsTypeController {
 			}
 			
 			DetachedCriteriaTS<AllocateSeatTypeSet> criteria = new DetachedCriteriaTS<AllocateSeatTypeSet>(AllocateSeatTypeSet.class);
-			if(!StringUtils.isEmpty(businessCustomerCode)){
-				criteria.add(Restrictions.eq("businessCustomerCode", businessCustomerCode));
+			if(businessCustomer != null){
+				criteria.add(Restrictions.eq("businessCustomerCode", businessCustomer.getBusinessCustomerCode()));
 			}
 			return allocateSeatTypeSetService.findForList(criteria, pageNumber, pageSize);
 		}catch(Exception e){
@@ -119,11 +121,12 @@ public class AllocateSeatsTypeController {
 	public Map<String, Object> allocateSeatTypeUpdate(AllocateSeatTypeSet allocateSeatType, HttpServletRequest request){
 		
 		Map<String, Object> result = new HashMap<String, Object>();
-		BusinessCustomer sessionbusinessCustomer = (BusinessCustomer)request.getSession().getAttribute("businessCustomer");
-		allocateSeatType.setBusinessCustomerCode(sessionbusinessCustomer.getBusinessCustomerCode());
-		allocateSeatType.setCreater(sessionbusinessCustomer.getBusinessCustomerName());
-		allocateSeatType.setCreateDate(new Date());
 		try{
+			BusinessCustomer sessionbusinessCustomer = (BusinessCustomer)request.getSession().getAttribute("businessCustomer");
+			allocateSeatType.setBusinessCustomerCode(sessionbusinessCustomer.getBusinessCustomerCode());
+			allocateSeatType.setCreater(sessionbusinessCustomer.getBusinessCustomerName());
+			allocateSeatType.setCreateDate(new Date());
+		
 			if(allocateSeatTypeSetService.allocateSeatTypeSetUpdate(allocateSeatType)){
 				result.put("success", true);
 				result.put("msg", "修改成功");
@@ -134,7 +137,7 @@ public class AllocateSeatsTypeController {
 		}catch(Exception e){
 			LOG.error("修改异常！", e);
 			result.put("success", false);
-			result.put("msg", e.getMessage());
+			result.put("msg", "修改失败，请联系管理员");
 		}
 		
 		return result;

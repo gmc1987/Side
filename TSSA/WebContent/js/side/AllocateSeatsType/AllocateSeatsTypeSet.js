@@ -59,7 +59,7 @@ Ext.onReady(function(){
 		        {name:'createDate', mapping:'createDate', type:'date', dateFormat:'time'},
 		        {name:'businessCustomerCode', mapping:'businessCustomerCode'},
 		        {name:'maxNumber', mapping:'maxNumber'},
-				{name:'allocateReg', mapping:'allocateReg'},
+				{name:'prefix', mapping:'prefix'},
 				{name:'basiceNumber', mapping:'basiceNumber'},
 				{name:'remark', mapping:'remark'},
 				{name:'isCycle', mapping:'isCycle'}]
@@ -76,7 +76,7 @@ Ext.onReady(function(){
 		{header : "创建时间",width : 100, sortable : true, dataIndex : 'createDate', renderer : Ext.util.Format.dateRenderer('Y-m-d H:i:s')},
 		{header : "商户编码",width : 100, sortable : true, dataIndex : 'businessCustomerCode'},
 		{header : "最大值", width : 100, sortable : true, dataIndex : 'maxNumber'},
-		{header:'出号规则', width:100, sortable:true, dataIndex:'allocateReg'},
+		{header:'前缀', width:100, sortable:true, dataIndex:'prefix'},
 		{header:'出号基数', width:100, sortable:true, dataIndex:'basiceNumber'},
 		{header:'是否循环', width:100, sortable:true, dataIndex:'isCycle', renderer:function(value){
 			if(value=='1'){
@@ -200,13 +200,13 @@ Ext.onReady(function(){
 					border : true,
 					items : [{
 						xtype : 'textfield',
-						fieldLabel : '出号规则',
-						name : 'allocateReg',
+						fieldLabel : '前缀',
+						name : 'prefix',
 						width : 215,
 						maxLength:100,
 						maxLengthText:'最大字符长度不能超过:{0}',
 						allowBlank : false,
-				    	blankText : '出号规则不能为空'
+				    	blankText : '前缀不能为空'
 						}]
 				},{
 					layout : 'form',
@@ -353,13 +353,13 @@ Ext.onReady(function(){
 					border : true,
 					items : [{
 						xtype : 'textfield',
-						fieldLabel : '出号规则',
-						name : 'allocateReg',
+						fieldLabel : '前缀',
+						name : 'prefix',
 						width : 215,
 						maxLength:100,
 						maxLengthText:'最大字符长度不能超过:{0}',
 						allowBlank : false,
-				    	blankText : '出号规则不能为空'
+				    	blankText : '前缀不能为空'
 						}]
 				},{
 					layout : 'form',
@@ -467,7 +467,7 @@ Ext.onReady(function(){
 				var typeCode = record.get("typeCode");
 				var typeName = record.get("typeName");
 				var maxNumber = record.get("maxNumber");
-				var allocateReg = record.get("allocateReg");
+				var prefix = record.get("prefix");
 				var basiceNumber = record.get("basiceNumber");
 				var isCycle = record.get("isCycle");
 				var remark = record.get("remark");
@@ -477,7 +477,7 @@ Ext.onReady(function(){
 				mForm.findField('typeCode').setValue(typeCode);
 				mForm.findField('typeName').setValue(typeName);
 				mForm.findField('maxNumber').setValue(maxNumber);
-				mForm.findField('allocateReg').setValue(allocateReg);
+				mForm.findField('prefix').setValue(prefix);
 				mForm.findField('basiceNumber').setValue(basiceNumber);
 				mForm.findField('isCycle').setValue(isCycle);
 				mForm.findField('remark').setValue(remark);

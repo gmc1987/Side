@@ -70,10 +70,10 @@ public class AllocateSeatTypeSet implements Serializable {
 	private Integer maxNumber;
 	
 	/**
-	 * 出号规则
+	 * 前缀
 	 */
-	@Column(length=200, nullable=true)
-	private String allocateReg;
+	@Column(length=10, nullable=true)
+	private String prefix;
 	
 	/**
 	 * 出号基数
@@ -149,12 +149,12 @@ public class AllocateSeatTypeSet implements Serializable {
 		this.maxNumber = maxNumber;
 	}
 
-	public String getAllocateReg() {
-		return allocateReg;
+	public String getPrefix() {
+		return prefix;
 	}
 
-	public void setAllocateReg(String allocateReg) {
-		this.allocateReg = allocateReg;
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
 	}
 
 	public Integer getBasiceNumber() {
