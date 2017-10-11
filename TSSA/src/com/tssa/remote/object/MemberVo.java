@@ -3,8 +3,6 @@
  */
 package com.tssa.remote.object;
 
-import java.util.Date;
-
 /**
  * @author gmc
  *

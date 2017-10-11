@@ -44,6 +44,10 @@ public class FileParseUtil {
 		} catch (Exception e) {
 			throw new Exception("the file is not Android or ios file error!!");
 			// return ELSE_FILE;
+		}finally {
+			if(zipFile != null) {
+				zipFile.close();
+			}
 		}
 	}
 
@@ -118,6 +122,9 @@ public class FileParseUtil {
 						+ " version= " + version + " identifier= " + identifier
 						+ "}");
 			}
+		}
+		if(zip != null) {
+			zip.close();
 		}
 		return app;
 	}

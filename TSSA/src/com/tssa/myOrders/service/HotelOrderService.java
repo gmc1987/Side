@@ -14,7 +14,6 @@ import com.tssa.common.service.BaseBusinessService;
 import com.tssa.cooperationBusiness.pojo.CooperationBusinessProduct;
 import com.tssa.myOrders.dao.IOrderDao;
 import com.tssa.myOrders.pojo.HotelOrder;
-import com.tssa.myOrders.pojo.Orders;
 
 /**
  * @author gmc

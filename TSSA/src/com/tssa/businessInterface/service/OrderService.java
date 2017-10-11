@@ -10,9 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.sf.json.JSONObject;
-
-import org.apache.commons.lang.SerializationUtils;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -36,6 +33,8 @@ import com.tssa.myOrders.pojo.RestaurantOrder;
 import com.tssa.remote.object.OrderVo;
 import com.tssa.remote.object.ProductVo;
 import com.tssa.util.DateWarpUtils;
+
+import net.sf.json.JSONObject;
 
 /**
  * @author gmc
@@ -93,7 +92,7 @@ public class OrderService<T> extends BaseBusinessService<T> {
 			}
 			
 			/*库存充足标志,默认库存充足*/
-			boolean isSufficient = true;
+//			boolean isSufficient = true;
 			/*查询产品信息*/
 			if(productCodes != null && productCodes.size() > 0){
 				for(String productCode : productCodes){

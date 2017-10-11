@@ -37,6 +37,7 @@ public class MenuDaoImpl extends HibernateEntitryDaoImpl implements MenuDao {
 			}
 		}
 		
+		@SuppressWarnings("rawtypes")
 		List menuList = query.list();
 		
 		if(menuList != null && menuList.size() > 0){
