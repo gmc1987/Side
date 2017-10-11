@@ -24,31 +24,44 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name="business_allocateseat_number_record")
+@Table(name = "business_allocateseat_number_record")
 public class AllocateSeatNumberRecord implements Serializable {
 
+	public AllocateSeatNumberRecord() {
+
+	}
+
+	public AllocateSeatNumberRecord(String allocateNo, String custId,
+			AllocateSeatTypeSet allocateSeatType) {
+		this.allocateNo = allocateNo;
+		this.custId = custId;
+		this.allocateSeatType = allocateSeatType;
+		this.recodeStatus = "0";
+		this.createDate = new Date();
+	}
+
 	@Id
-	@Column(length=32)
-	@GeneratedValue(generator="system-uuid")
+	@Column(length = 32)
+	@GeneratedValue(generator = "system-uuid")
 	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	private String uuid;
-	
-	@Column(length=18, nullable=false)
-	private Integer allocateNo;
-	
-	@ManyToOne(cascade=CascadeType.REFRESH, fetch=FetchType.EAGER)
-	@JoinColumn(name="allocateSeatType")
-	private AllocateSeatTypeSet allocateSeatType; 
-	
-	@Column(length=32, nullable=false)
+
+	@Column(length = 18, nullable = false)
+	private String allocateNo;
+
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+	@JoinColumn(name = "allocateSeatType")
+	private AllocateSeatTypeSet allocateSeatType;
+
+	@Column(length = 32)
 	private String custId;
-	
-	@Column(length=4, nullable=false)
+
+	@Column(length = 4, nullable = false)
 	private String recodeStatus;
-	
+
 	@Column
 	private Date createDate;
-	
+
 	public String getUuid() {
 		return uuid;
 	}
@@ -57,11 +70,11 @@ public class AllocateSeatNumberRecord implements Serializable {
 		this.uuid = uuid;
 	}
 
-	public Integer getAllocateNo() {
+	public String getAllocateNo() {
 		return allocateNo;
 	}
 
-	public void setAllocateNo(Integer allocateNo) {
+	public void setAllocateNo(String allocateNo) {
 		this.allocateNo = allocateNo;
 	}
 
@@ -96,5 +109,5 @@ public class AllocateSeatNumberRecord implements Serializable {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-	
+
 }

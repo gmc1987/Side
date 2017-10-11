@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -24,6 +25,7 @@ import com.tssa.allocateSeats.pojo.AllocateSeatNumberRecord;
 import com.tssa.allocateSeats.pojo.AllocateSeatTypeSet;
 import com.tssa.allocateSeats.service.AllocateSeatNumberRecordService;
 import com.tssa.allocateSeats.service.AllocateSeatTypeSetService;
+import com.tssa.allocateSeats.vo.AllocateSeatNumberSetVO;
 import com.tssa.businessUser.pojo.BusinessCustomer;
 import com.tssa.common.mode.DetachedCriteriaTS;
 
@@ -44,44 +46,25 @@ public class AllocateSeatNumberRecordController {
 	private AllocateSeatTypeSetService allocateSeatTypeSetService;
 	
 	@RequestMapping("/toList")
-	public String toList(){
-		return "/AllocateSeatsManage/AllocateSeatsNumberRecordManage";
-	}
-	
-	/**
-	 * 查询商户所有派位规则
-	 * @param cooperationCode
-	 * @return
-	 */
-	@RequestMapping("/getList")
-	@ResponseBody
-	public Map<String, Object> getList(HttpServletRequest request, String cooperationCode){
-		
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		try{
+	public String toList(HttpServletRequest request, ModelMap map){
+		map.clear();
+		try {
 			BusinessCustomer businessCustomer = (BusinessCustomer)request.getSession().getAttribute("businessCustomer");
-			
 			DetachedCriteriaTS<AllocateSeatTypeSet> criteria = new DetachedCriteriaTS<AllocateSeatTypeSet>(AllocateSeatTypeSet.class);
-			if(StringUtils.isEmpty(cooperationCode)){
-				criteria.add(Restrictions.eq("businessCustomerCode", businessCustomer.getBusinessCustomerCode()));
+			criteria.add(Restrictions.eq("businessCustomerCode", businessCustomer.getVendorCode()));//取商户编码，并非商户用户编码
+			AllocateSeatTypeSet allocateSeatTypeSet = allocateSeatTypeSetService.find(criteria);
+			List<AllocateSeatNumberSetVO> list = allocateSeatNumberRecordService.getAllocateSeatNumberRecord(allocateSeatTypeSet, null);
+			if(list != null && list.size() > 0) {
+				map.put("result", list);
 			}else{
-				criteria.add(Restrictions.eq("businessCustomerCode", cooperationCode));
+				map.put("result", null);
 			}
-			List<AllocateSeatTypeSet> result = allocateSeatTypeSetService.findAll(criteria);
-			if(result != null && result.size() > 0){
-				resultMap.put("success", true);
-				resultMap.put("data", result);
-				resultMap.put("msg", "查询成功");
-			}
-		}catch(Exception e){
+			
+		}catch(Exception e) {
+			e.printStackTrace();
 			LOG.error("查询异常", e);
-			resultMap.put("success", false);
-			resultMap.put("data", null);
-			resultMap.put("msg", "查询无记录");
 		}
-		
-		return resultMap;
-		
+		return "/AllocateSeatsManage/AllocateSeatsNumberRecordManage";
 	}
 	
 	/**
@@ -94,7 +77,58 @@ public class AllocateSeatNumberRecordController {
 	@ResponseBody
 	public Map<String, Object> createNo(String typeId, String custCode){
 		
-		return null;
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		if(StringUtils.isEmpty(typeId) && StringUtils.isEmpty(custCode)){
+			result.put("success", false);
+			result.put("msg", "参数异常");
+			return result;
+		}
+		
+		try {
+			AllocateSeatNumberSetVO vo = allocateSeatNumberRecordService.extraNum(typeId, custCode);
+			if(vo != null) {
+				result.put("success", true);
+				result.put("msg", "出号成功");
+				result.put("data", vo);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("success", false);
+			result.put("msg", "出号异常");
+		}
+		
+		return result;
+	}
+	
+	@RequestMapping("/numInvalid")
+	@ResponseBody
+	public Map<String, Object> numInvalid(String uuid, String num){
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		if(StringUtils.isEmpty(uuid) && StringUtils.isEmpty(num)){
+			result.put("success", false);
+			result.put("msg", "参数异常");
+			return result;
+		}
+		
+		try {
+			AllocateSeatNumberRecord record = allocateSeatNumberRecordService.get(AllocateSeatNumberRecord.class, uuid);
+			if(record != null) {
+				record.setRecodeStatus("3");
+				allocateSeatNumberRecordService.update(record);
+				result.put("success", true);
+				result.put("data", record);
+				result.put("msg", "号码已作废");
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			result.put("success", true);
+			result.put("msg", "发生异常，请稍后再试");
+		}
+		
+		return result;
 	}
 	
 }

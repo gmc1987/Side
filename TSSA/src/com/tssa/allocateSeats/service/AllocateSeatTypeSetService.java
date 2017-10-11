@@ -3,6 +3,8 @@
  */
 package com.tssa.allocateSeats.service;
 
+import java.util.List;
+
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tssa.allocateSeats.dao.IAllocateSeatTypeSetDao;
 import com.tssa.allocateSeats.pojo.AllocateSeatTypeSet;
+import com.tssa.allocateSeats.vo.AllocateSeatNumberSetVO;
 import com.tssa.common.mode.DetachedCriteriaTS;
 import com.tssa.common.mode.TssaBaseException;
 import com.tssa.common.service.BaseBusinessService;
@@ -24,6 +27,10 @@ public class AllocateSeatTypeSetService extends BaseBusinessService<AllocateSeat
 
 	@Autowired
 	private IAllocateSeatTypeSetDao iAllocateSeatTypeSetDao;
+	
+	public List<AllocateSeatNumberSetVO> getAllocateSeatType(AllocateSeatTypeSet allocateSeatTypeSet) throws Exception{
+		return iAllocateSeatTypeSetDao.getAllocateSeatType(allocateSeatTypeSet);
+	}
 	
 	@Transactional
 	public boolean allocateSeatTypeSetAdd(AllocateSeatTypeSet allocateSeatTypeSet) throws TssaBaseException{
@@ -92,4 +99,5 @@ public class AllocateSeatTypeSetService extends BaseBusinessService<AllocateSeat
 		
 		return flag;
 	}
+	
 }

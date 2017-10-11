@@ -68,7 +68,7 @@ public class AllocateSeatsTypeController {
 			
 			DetachedCriteriaTS<AllocateSeatTypeSet> criteria = new DetachedCriteriaTS<AllocateSeatTypeSet>(AllocateSeatTypeSet.class);
 			if(businessCustomer != null){
-				criteria.add(Restrictions.eq("businessCustomerCode", businessCustomer.getBusinessCustomerCode()));
+				criteria.add(Restrictions.eq("businessCustomerCode", businessCustomer.getVendorCode()));//取商户号并非取用户编号
 			}
 			return allocateSeatTypeSetService.findForList(criteria, pageNumber, pageSize);
 		}catch(Exception e){
@@ -90,7 +90,7 @@ public class AllocateSeatsTypeController {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		BusinessCustomer sessionbusinessCustomer = (BusinessCustomer)request.getSession().getAttribute("businessCustomer");
-		allocateSeatType.setBusinessCustomerCode(sessionbusinessCustomer.getBusinessCustomerCode());
+		allocateSeatType.setBusinessCustomerCode(sessionbusinessCustomer.getVendorCode());
 		allocateSeatType.setCreater(sessionbusinessCustomer.getBusinessCustomerName());
 		allocateSeatType.setCreateDate(new Date());
 		try{
