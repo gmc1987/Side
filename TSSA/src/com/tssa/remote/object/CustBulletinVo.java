@@ -3,12 +3,18 @@
  */
 package com.tssa.remote.object;
 
+import java.io.Serializable;
 
 /**
  * @author gmc
  * @see 手机客户端公告对象
  */
-public class CustBulletinVo extends BaseVo {
+public class CustBulletinVo extends BaseVo implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private String id;
 	

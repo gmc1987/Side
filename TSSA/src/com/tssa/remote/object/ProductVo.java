@@ -3,14 +3,21 @@
  */
 package com.tssa.remote.object;
 
+import java.io.Serializable;
+
 /**
  * @author gmc
  * @see <P>返回手机端产品实体</P>
  * @version 1.0.0
  * Date:2014-1-4
  */
-public class ProductVo extends BaseVo {
+public class ProductVo extends BaseVo implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public ProductVo(){
 		
 	}

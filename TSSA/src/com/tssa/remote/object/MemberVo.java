@@ -3,11 +3,18 @@
  */
 package com.tssa.remote.object;
 
+import java.io.Serializable;
+
 /**
  * @author gmc
  *
  */
-public class MemberVo extends BaseVo{
+public class MemberVo extends BaseVo implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 主键

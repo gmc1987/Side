@@ -3,20 +3,9 @@
  */
 package com.tssa.remote.object;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
-
-import org.hibernate.annotations.GenericGenerator;
 
 import com.tssa.cooperationBusiness.pojo.CooperationBusiness;
 import com.tssa.customer.pojo.Customer;
@@ -27,8 +16,13 @@ import com.tssa.suit.pojo.SuitType;
  * @author gmc
  * @see 用户投诉数据实体
  */
-public class UserSuitVo extends BaseVo {
+public class UserSuitVo extends BaseVo implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private String suitId;
 	
 	private String title;

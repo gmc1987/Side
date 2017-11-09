@@ -3,6 +3,7 @@
  */
 package com.tssa.remote.object;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -10,7 +11,12 @@ import java.util.List;
  * @author gmc
  * @see 手机客户端订单实体
  */
-public class OrderVo extends BaseVo {
+public class OrderVo extends BaseVo implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private String orderId;
 	

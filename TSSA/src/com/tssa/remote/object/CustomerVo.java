@@ -1,5 +1,6 @@
 package com.tssa.remote.object;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -10,8 +11,13 @@ import org.springframework.format.annotation.DateTimeFormat;
  * Date: 2013-11-20
  * @version 1.01
  */
-public class CustomerVo extends BaseVo{
+public class CustomerVo extends BaseVo implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/*主键*/
 	private String cid;
 	
