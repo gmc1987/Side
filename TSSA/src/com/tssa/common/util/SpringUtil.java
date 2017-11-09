@@ -37,9 +37,7 @@ public class SpringUtil {
             if(logger.isDebugEnabled()) logger.debug("===================================Init Spring's ApplicationContext=========================================");  
             try  
             {  
-                factory = new ClassPathXmlApplicationContext(new String[]{"ApplicationContext.xml","ApplicationContext-bean.xml"  
-                        //,"applicationContext-daoSupport-test.xml"  
-                        });  
+                factory = new ClassPathXmlApplicationContext(new String[]{"ApplicationContext.xml","ApplicationContext-bean.xml","ApplicationContext-scheduler.xml"});  
             }  
             catch ( Exception e1 )  
             {  

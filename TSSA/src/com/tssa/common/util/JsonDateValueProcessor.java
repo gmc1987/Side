@@ -6,12 +6,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import com.tssa.cooperationBusiness.pojo.CooperationBusiness;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JsonConfig;
 import net.sf.json.processors.JsonValueProcessor;
-
-import com.tssa.cooperationBusiness.pojo.CooperationBusiness;
-import com.tssa.customer.pojo.Customer;
 
 /**
  * @author zhang yanan
@@ -66,7 +65,7 @@ public class JsonDateValueProcessor implements JsonValueProcessor {
 
 	public static void main(String[] args) {
 
-		List<CooperationBusiness> list = new ArrayList();
+		List<CooperationBusiness> list = new ArrayList<CooperationBusiness>();
 		CooperationBusiness user = new CooperationBusiness();
 		user.setCooperCode("");
 		user.setAccount("dddd");
