@@ -12,5 +12,5 @@ import com.tssa.common.dao.HibernateEntitryDao;
  */
 public interface IAllocateSeatNumberRecordDao extends HibernateEntitryDao {
 	
-	public AllocateSeatNumberSetVO getNewRecord(String typeId, String custId) throws Exception;
+	public AllocateSeatNumberSetVO getNewRecord(String typeId) throws Exception;
 }

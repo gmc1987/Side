@@ -56,6 +56,9 @@ public class AllocateSeatNumberRecord implements Serializable {
 	@Column(length = 32)
 	private String custId;
 
+	/**
+	 * 0-未取号，1-已取号，3-已作废
+	 */
 	@Column(length = 4, nullable = false)
 	private String recodeStatus;
 

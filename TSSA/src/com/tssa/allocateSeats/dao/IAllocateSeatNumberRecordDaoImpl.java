@@ -3,11 +3,14 @@
  */
 package com.tssa.allocateSeats.dao;
 
+import java.util.Date;
+
 import org.hibernate.SQLQuery;
 import org.hsqldb.lib.StringUtil;
 
 import com.tssa.allocateSeats.vo.AllocateSeatNumberSetVO;
 import com.tssa.common.dao.HibernateEntitryDaoImpl;
+import com.tssa.common.util.DateWarpUtils;
 
 /**
  * @author gmc
@@ -17,27 +20,22 @@ public class IAllocateSeatNumberRecordDaoImpl extends HibernateEntitryDaoImpl
 		implements IAllocateSeatNumberRecordDao {
 
 	@Override
-	public AllocateSeatNumberSetVO getNewRecord(String typeId, String custId) throws Exception {
+	public AllocateSeatNumberSetVO getNewRecord(String typeId) throws Exception {
 		AllocateSeatNumberSetVO vo = null;
 		StringBuffer sql = new StringBuffer();
 		sql.append("select t.aUuid, t.cooperName, t.num, t.allocateSeatType, t.typeName, t.custId, max(t.createDate), t.recodeStatus, t.remark, t.uuid FROM (");
 		sql.append("SELECT a.uuid as aUuid, c.cooperName, b.allocateNo as num, b.allocateSeatType, a.typeName, b.custId, b.createDate, b.recodeStatus, a.remark, b.uuid ");
 		sql.append("FROM business_allocateSeatType a ");
 		sql.append("LEFT JOIN business_allocateseat_number_record b ON a.uuid = b.allocateSeatType ");
+		sql.append("and b.createDate between '" + DateWarpUtils.format(new Date()) + " 00:00:00" + "' ").append("and '").append(DateWarpUtils.format(new Date()) + " 23:59:59' ");
 		sql.append("left join BUSINESS_COOPERATIONBUSINESS c on a.businessCustomerCode=c.cooperCode ");
 		sql.append("where b.allocateSeatType=? ");
 //		sql.append("and b.recodeStatus!='1' ");
-		if(!StringUtil.isEmpty(custId)) {
-			sql.append("and b.custId=?");
-		}
 		sql.append("GROUP BY a.uuid, c.cooperName, b.allocateSeatType, a.typeName, b.custId, b.recodeStatus, a.remark, b.uuid");
 		sql.append(") t");
 		
 		SQLQuery query = getSession().createSQLQuery(sql.toString());
 		query.setParameter(0, typeId);
-		if(!StringUtil.isEmpty(custId)) {
-			query.setParameter(1, custId);
-		}
 
 		for(Object objects : query.list()){
 			Object[] object = (Object[])objects;

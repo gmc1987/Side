@@ -3,6 +3,8 @@
  */
 package com.tssa.allocateSeats.service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.criterion.Order;
@@ -19,6 +21,10 @@ import com.tssa.allocateSeats.vo.AllocateSeatNumberSetVO;
 import com.tssa.common.mode.DetachedCriteriaTS;
 import com.tssa.common.mode.TssaBaseException;
 import com.tssa.common.service.BaseBusinessService;
+import com.tssa.common.util.DateWarpUtils;
+import com.tssa.cooperationBusiness.pojo.CooperationBusiness;
+import com.tssa.cooperationBusiness.service.CooperationService;
+import com.tssa.remote.object.CustNumberVo;
 
 /**
  * @author gmc
@@ -30,6 +36,8 @@ public class AllocateSeatNumberRecordService extends BaseBusinessService<Allocat
 	private AllocateSeatTypeSetService allocateSeatTypeSetService;
 	@Autowired
 	private IAllocateSeatNumberRecordDao iAllocateSeatNumberRecordDao;
+	@Autowired
+	private CooperationService cooperationService;
 	
 	/**
 	 * 初始化出号
@@ -83,6 +91,7 @@ public class AllocateSeatNumberRecordService extends BaseBusinessService<Allocat
 		DetachedCriteriaTS<AllocateSeatNumberRecord> criteria = new DetachedCriteriaTS<AllocateSeatNumberRecord>(AllocateSeatNumberRecord.class);
 		criteria.add(Restrictions.eq("allocateSeatType", typeSet));
 //		criteria.add(Restrictions.eq("recodeStatus", "1"));
+		criteria.add(Restrictions.between("createDate", DateWarpUtils.parseDate(DateWarpUtils.format(new Date()) + " 00:00:00"), DateWarpUtils.parseDate(DateWarpUtils.format(new Date()) + " 23:59:59")));
 		criteria.addOrder(Order.desc("createDate"));
 		List<AllocateSeatNumberRecord> records = iAllocateSeatNumberRecordDao.find(criteria, 1);
 		if(records != null && records.size() > 0) {
@@ -94,6 +103,7 @@ public class AllocateSeatNumberRecordService extends BaseBusinessService<Allocat
 		if(record != null) {
 			if("0".equals(record.getRecodeStatus())) {
 				record.setRecodeStatus("1");
+				record.setCustId(custId);
 			}
 			iAllocateSeatNumberRecordDao.saveOrUpdate(record);
 			newNum = Integer.parseInt(record.getAllocateNo().replaceAll("[A-Za-z]", ""));
@@ -106,7 +116,7 @@ public class AllocateSeatNumberRecordService extends BaseBusinessService<Allocat
 		AllocateSeatNumberRecord newRecord = new AllocateSeatNumberRecord(allocateNum, null, typeSet);
 		iAllocateSeatNumberRecordDao.save(newRecord);
 		
-		return getNewNumberRecord(typeId, custId);
+		return getNewNumberRecord(typeId);
 	}
 	
 	/**
@@ -116,10 +126,64 @@ public class AllocateSeatNumberRecordService extends BaseBusinessService<Allocat
 	 * @return
 	 * @throws Exception
 	 */
-	public AllocateSeatNumberSetVO getNewNumberRecord(String typeId, String custId) throws Exception {
+	public AllocateSeatNumberSetVO getNewNumberRecord(String typeId) throws Exception {
 		if(StringUtil.isEmpty(typeId)) {
 			return null;
 		}
-		return iAllocateSeatNumberRecordDao.getNewRecord(typeId, custId);
+		return iAllocateSeatNumberRecordDao.getNewRecord(typeId);
+	}
+	
+	/**
+	 * 查询等待人数
+	 * @param typeId
+	 * @return
+	 * @throws Exception
+	 */
+	public int getCount(String typeId)  throws Exception {
+		AllocateSeatTypeSet typeSet = allocateSeatTypeSetService.get(AllocateSeatTypeSet.class, typeId);
+		DetachedCriteriaTS<AllocateSeatNumberRecord> criteria = new DetachedCriteriaTS<AllocateSeatNumberRecord>(AllocateSeatNumberRecord.class);
+		criteria.add(Restrictions.eq("allocateSeatType", typeSet));
+		criteria.add(Restrictions.eq("recodeStatus", "1"));
+		criteria.add(Restrictions.between("createDate", DateWarpUtils.parseDate(DateWarpUtils.format(new Date()) + " 00:00:00"), DateWarpUtils.parseDate(DateWarpUtils.format(new Date()) + " 23:59:59")));
+		return iAllocateSeatNumberRecordDao.count(criteria);
+	}
+	
+	/**
+	 * 查询商户所有派位规则等待人数
+	 */
+	public List<CustNumberVo> getVendorAllNumberCount(String vendor) throws Exception {
+		List<CustNumberVo> list = null;
+		DetachedCriteriaTS<AllocateSeatTypeSet> criteria1 = new DetachedCriteriaTS<AllocateSeatTypeSet>(AllocateSeatTypeSet.class);
+		criteria1.add(Restrictions.eq("businessCustomerCode", vendor));
+		List<AllocateSeatTypeSet> typeList = allocateSeatTypeSetService.findAll(criteria1);
+		DetachedCriteriaTS<CooperationBusiness> criteria2 = new DetachedCriteriaTS<CooperationBusiness>(CooperationBusiness.class);
+		criteria2.add(Restrictions.eq("cooperCode", vendor));
+		CooperationBusiness cooperationBusiness = cooperationService.find(criteria2);
+		if(typeList != null && typeList.size() > 0) {
+			list = new ArrayList<CustNumberVo>();
+			for(AllocateSeatTypeSet type : typeList) {
+				CustNumberVo vo = new CustNumberVo();
+				DetachedCriteriaTS<AllocateSeatNumberRecord> criteria = new DetachedCriteriaTS<AllocateSeatNumberRecord>(AllocateSeatNumberRecord.class);
+				criteria.add(Restrictions.eq("allocateSeatType", type));
+				criteria.add(Restrictions.eq("recodeStatus", "1"));
+				criteria.add(Restrictions.between("createDate", DateWarpUtils.parseDate(DateWarpUtils.format(new Date()) + " 00:00:00"), DateWarpUtils.parseDate(DateWarpUtils.format(new Date()) + " 23:59:59")));
+				int num = iAllocateSeatNumberRecordDao.count(criteria);
+				
+				List<AllocateSeatNumberSetVO> numberSet = this.getAllocateSeatNumberRecord(type, null);
+				
+				for(AllocateSeatNumberSetVO setVO : numberSet) {
+					if(setVO.getTypeId().equals(type.getUuid())) {
+						vo.setFrontCount(num);
+						vo.setTypeId(type.getUuid());
+						vo.setTypeName(type.getTypeName());
+						vo.setVendorCode(cooperationBusiness.getCooperCode());
+						vo.setVendorName(cooperationBusiness.getCooperName());
+						vo.setCustNum(setVO.getNum());
+						list.add(vo);
+					}
+				}
+			}
+		}
+		return list;
 	}
 }
