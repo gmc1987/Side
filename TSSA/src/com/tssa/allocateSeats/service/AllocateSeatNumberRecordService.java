@@ -3,6 +3,7 @@
  */
 package com.tssa.allocateSeats.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,18 +14,21 @@ import org.hsqldb.lib.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tssa.allocateSeats.dao.IAllocateSeatNumberRecordDao;
 import com.tssa.allocateSeats.pojo.AllocateSeatNumberRecord;
 import com.tssa.allocateSeats.pojo.AllocateSeatTypeSet;
 import com.tssa.allocateSeats.vo.AllocateSeatNumberSetVO;
 import com.tssa.common.mode.DetachedCriteriaTS;
+import com.tssa.common.mode.PageMode;
 import com.tssa.common.mode.TssaBaseException;
 import com.tssa.common.service.BaseBusinessService;
 import com.tssa.common.util.DateWarpUtils;
 import com.tssa.cooperationBusiness.pojo.CooperationBusiness;
 import com.tssa.cooperationBusiness.service.CooperationService;
 import com.tssa.remote.object.CustNumberVo;
+import com.tssa.remote.object.CustTakeNumberVO;
 
 /**
  * @author gmc
@@ -186,4 +190,52 @@ public class AllocateSeatNumberRecordService extends BaseBusinessService<Allocat
 		}
 		return list;
 	}
+	
+	/**
+	 * 获取当前客户所有取号明细数据。
+	 * @param custId
+	 * @return
+	 * @throws Exception
+	 */
+	public List<CustTakeNumberVO> getCustTakeNumberDeatil(String custId, int start, int limit) throws Exception{
+		List<CustTakeNumberVO> list = null;
+		DetachedCriteriaTS<AllocateSeatNumberRecord> detachedCriteria = new DetachedCriteriaTS<AllocateSeatNumberRecord>(
+				AllocateSeatNumberRecord.class);
+		detachedCriteria.add(Restrictions.eq("custId", custId));
+		detachedCriteria.addOrder(Order.desc("createDate"));
+		PageMode<AllocateSeatNumberRecord> pageMode = findForList(detachedCriteria,
+				start, limit);
+		if (pageMode != null && pageMode.getRecords().size() > 0) {
+			list = new ArrayList<CustTakeNumberVO>();
+			for (AllocateSeatNumberRecord record : pageMode.getRecords()) {
+				String vendorCode = record.getAllocateSeatType().getBusinessCustomerCode();
+				DetachedCriteriaTS<CooperationBusiness> vendorCriteria = new DetachedCriteriaTS<CooperationBusiness>(
+						CooperationBusiness.class);
+				vendorCriteria.add(Restrictions.eq("cooperCode", vendorCode));
+				CooperationBusiness vendor = cooperationService.find(vendorCriteria);
+				//统计等待人数
+				DetachedCriteriaTS<AllocateSeatNumberRecord> detachedCriteria2= new DetachedCriteriaTS<AllocateSeatNumberRecord>(
+						AllocateSeatNumberRecord.class);
+				detachedCriteria2.add(Restrictions.between("createDate", DateWarpUtils.parseDate(DateWarpUtils.format(new Date()) + " 00:00:00"), DateWarpUtils.parseDate(DateWarpUtils.format(new Date()) + " 23:59:59")));
+				detachedCriteria2.add(Restrictions.eq("allocateSeatType", record.getAllocateSeatType()));
+				detachedCriteria2.add(Restrictions.eq("recodeStatus", "1"));
+				detachedCriteria2.add(Restrictions.lt("allocateNo", record.getAllocateNo()));
+				int waitNum = iAllocateSeatNumberRecordDao.count(detachedCriteria2);
+				String wait = "0";
+				if(waitNum != 0) {
+					wait = String.valueOf(waitNum);
+				}else {
+					wait = "0";
+				}
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				CustTakeNumberVO vo = new CustTakeNumberVO(record.getUuid(), vendorCode, vendor.getCooperName(),
+						record.getAllocateNo(), wait, record.getRecodeStatus(),
+						dateFormat.format(record.getCreateDate()));
+				list.add(vo);
+			}
+		}
+
+		return list;
+	}
+	
 }
