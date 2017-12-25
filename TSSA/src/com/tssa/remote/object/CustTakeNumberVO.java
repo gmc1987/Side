@@ -19,7 +19,7 @@ public class CustTakeNumberVO extends BaseVo implements Serializable {
 	}
 
 	public CustTakeNumberVO(String numberId, String vendorCode, String vendorName, String number, String waitNum,
-			String status, String takeTime) {
+			String status, String takeTime, String totalCount) {
 		this.numberId = numberId;
 		this.vendorCode = vendorCode;
 		this.vendorName = vendorName;
@@ -27,6 +27,7 @@ public class CustTakeNumberVO extends BaseVo implements Serializable {
 		this.waitNum = waitNum;
 		this.status = status;
 		this.takeTime = takeTime;
+		this.totalCount = totalCount;
 	}
 
 	/**
@@ -68,6 +69,11 @@ public class CustTakeNumberVO extends BaseVo implements Serializable {
 	 * 取号时间
 	 */
 	private String takeTime;
+	
+	/**
+	 * 数据总数
+	 */
+	private String totalCount;
 
 	public String getNumberId() {
 		return numberId;
@@ -123,6 +129,14 @@ public class CustTakeNumberVO extends BaseVo implements Serializable {
 
 	public void setTakeTime(String takeTime) {
 		this.takeTime = takeTime;
+	}
+
+	public String getTotalCount() {
+		return totalCount;
+	}
+
+	public void setTotalCount(String totalCount) {
+		this.totalCount = totalCount;
 	}
 
 }

@@ -230,7 +230,7 @@ public class AllocateSeatNumberRecordService extends BaseBusinessService<Allocat
 				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				CustTakeNumberVO vo = new CustTakeNumberVO(record.getUuid(), vendorCode, vendor.getCooperName(),
 						record.getAllocateNo(), wait, record.getRecodeStatus(),
-						dateFormat.format(record.getCreateDate()));
+						dateFormat.format(record.getCreateDate()), String.valueOf(pageMode.getCount()));
 				list.add(vo);
 			}
 		}
