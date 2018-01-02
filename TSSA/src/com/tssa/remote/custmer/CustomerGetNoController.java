@@ -23,7 +23,6 @@ import com.tssa.allocateSeats.service.AllocateSeatNumberRecordService;
 import com.tssa.allocateSeats.service.AllocateSeatTypeSetService;
 import com.tssa.common.mode.DetachedCriteriaTS;
 import com.tssa.common.util.DateWarpUtils;
-import com.tssa.cooperationBusiness.service.CooperationService;
 import com.tssa.remote.common.BaseController;
 import com.tssa.remote.object.CustNumberVo;
 import com.tssa.remote.object.CustTakeNumberVO;
@@ -43,9 +42,6 @@ public class CustomerGetNoController extends BaseController {
 	private AllocateSeatTypeSetService allocateSeatTypeSetService;
 	@Autowired
 	private AllocateSeatNumberRecordService allocateSeatNumberRecordService;
-	@Autowired
-	private CooperationService cooperationService;
-
 	/**
 	 * 查询商户当前号数与排队等待人数 请求方式：
 	 * http://localhost:8080/TSSA/clientGetNo/showNum.do?vendorCode=xx
@@ -177,9 +173,17 @@ public class CustomerGetNoController extends BaseController {
 			result.put("msg", "参数有误");
 			return result;
 		}
+		int startIndex = 0;
+		//开始行数
+		if(start == 0) {
+			startIndex = 1;
+//			limit = 10;
+		} else {
+			startIndex = start * limit;
+		}
 
 		try {
-			List<CustTakeNumberVO> resultData = allocateSeatNumberRecordService.getCustTakeNumberDeatil(custId, start, limit);
+			List<CustTakeNumberVO> resultData = allocateSeatNumberRecordService.getCustTakeNumberDeatil(custId, startIndex, limit);
 			if(resultData != null && resultData.size() > 0) {
 				result.put("success", true);
 				result.put("data", resultData);
@@ -197,6 +201,39 @@ public class CustomerGetNoController extends BaseController {
 		}
 
 		return result;
+	}
+	
+	/**
+	 * 请求方式：
+	 * http://localhost:8080/TSSA/clientGetNo/custCancelNoDetail.do?uuid=xx
+	 * 用户取消取号单
+	 * 
+	 * @param uuid
+	 * @return
+	 */
+	@RequestMapping("custCancelNoDetail")
+	@ResponseBody
+	public Map<String, Object> custCancelNoDetail(String uuid) {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		if(StringUtils.isEmpty(uuid)) {
+			resultMap.put("success", false);
+			resultMap.put("data", null);
+			resultMap.put("msg", "参数有误!");
+			return resultMap;
+		}
+		try {
+			AllocateSeatNumberRecord record = allocateSeatNumberRecordService.get(AllocateSeatNumberRecord.class, uuid);
+			allocateSeatNumberRecordService.delete(record);
+			resultMap.put("success", true);
+			resultMap.put("data", null);
+			resultMap.put("msg", "取消成功");
+		} catch(Exception e) {
+			logger.error(e.getMessage(), e);
+			resultMap.put("success", false);
+			resultMap.put("data", null);
+			resultMap.put("msg", "取消失败，发生系统异常。");
+		}
+		return resultMap;
 	}
 
 }
