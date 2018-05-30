@@ -13,8 +13,28 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>${title}</title>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=v5ifreGL4gF1X2z6WZfYXRprlLsNQnHG"></script>
 <script type="text/javascript">
 Ext.onReady(function(){
+	
+	var map = new BMap.Map("allmap");
+	map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);
+	var local = null;
+
+	function getPoint(){
+		var status = addressForm.getForm().findField("saveOrUpdate").getValue();
+		var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+		map.centerAndZoom(pp, 18);
+		map.addOverlay(new BMap.Marker(pp));    //添加标注 
+		if(status == 0){
+			addForm.getForm().findField("longitude").setValue(pp.lng);
+			addForm.getForm().findField("latitude").setValue(pp.lat);
+		} else {
+			modForm.getForm().findField("longitude").setValue(pp.lng);
+			modForm.getForm().findField("latitude").setValue(pp.lat);
+		}
+		addressWin.hide();
+	}
 	
 	var intPageSize =10;
  	/* var type_src = [['03', '餐饮'], ['00', '娱乐'],['02', '购物'],['01','酒店住宿'],['04','旅游']];
@@ -648,6 +668,22 @@ Ext.onReady(function(){
 					layout : 'form',
 					border : true,
 					colspan : 2,
+					items:[{
+						xtype : 'hidden',
+						name : 'longitude'
+						}]
+				},{
+					layout : 'form',
+					border : true,
+					colspan : 2,
+					items:[{
+						xtype : 'hidden',
+						name : 'latitude'
+						}]
+				},{
+					layout : 'form',
+					border : true,
+					colspan : 2,
 					items : [{
 						xtype : 'textfield',
 						fieldLabel : '地址',
@@ -914,6 +950,22 @@ Ext.onReady(function(){
 					layout : 'form',
 					border : true,
 					colspan : 2,
+					items:[{
+						xtype : 'hidden',
+						name : 'longitude'
+						}]
+				},{
+					layout : 'form',
+					border : true,
+					colspan : 2,
+					items:[{
+						xtype : 'hidden',
+						name : 'latitude'
+						}]
+				},{
+					layout : 'form',
+					border : true,
+					colspan : 2,
 					items : [{
 						xtype : 'textfield',
 						fieldLabel : '地址',
@@ -1121,7 +1173,10 @@ Ext.onReady(function(){
 					modForm.getForm().findField("cityText").setValue(cityText);
 					modForm.getForm().findField("detailAddressText").setValue(detailedAddress);
 				}
-				addressWin.hide();
+				local = new BMap.LocalSearch(map, {
+					onSearchComplete: getPoint
+				});
+				local.search(detailedAddress);
 			}
 		},{
 			text : '取消',
@@ -1259,5 +1314,6 @@ Ext.onReady(function(){
 	<div id="add_pubwin"></div>
 	<div id="mod_pubwin"></div>
 	<div id="address_win"></div>
+	<div id="allmap" style="display : none;"></div>
 </body>
 </html>

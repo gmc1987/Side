@@ -98,7 +98,7 @@
 	    </form>
 	    </div>
 	</div>
-	</div>
+</div>
 	
 	<style>
 	/*ie6提示*/
