@@ -12,13 +12,15 @@ import org.springframework.stereotype.Service;
 import com.tssa.common.service.BaseBusinessService;
 import com.tssa.cooperationBusiness.pojo.CooperationBusinessProduct;
 import com.tssa.myOrders.pojo.RestaurantOrder;
+import com.tssa.myOrders.pojo.ShopOrder;
 
 /**
- * @author gmc
+ * @author gmc870223
  *
  */
+
 @Service
-public class RestaurantOrderService extends BaseBusinessService<RestaurantOrder> {
+public class ShopOrderService extends BaseBusinessService<ShopOrder> {
 
 	/** 根据orderId查询订单所有产品信息
 	 * @param orderId
@@ -29,7 +31,7 @@ public class RestaurantOrderService extends BaseBusinessService<RestaurantOrder>
 		List<CooperationBusinessProduct> products = null;
 		
 		if(orderId != null && !"".equals(orderId)){
-			RestaurantOrder order = get(RestaurantOrder.class, orderId);
+			ShopOrder order = get(ShopOrder.class, orderId);
 			if( order != null ){
 				Set<CooperationBusinessProduct> productSet = order.getProducts();
 				products = new ArrayList<CooperationBusinessProduct>();
@@ -38,7 +40,6 @@ public class RestaurantOrderService extends BaseBusinessService<RestaurantOrder>
 				}
 			}
 		}
-		
 		return products;
 	}
 }

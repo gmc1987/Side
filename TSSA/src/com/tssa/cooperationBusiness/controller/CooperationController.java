@@ -18,6 +18,7 @@ import net.sf.json.JsonConfig;
 import net.sf.json.util.CycleDetectionStrategy;
 import net.sf.json.util.PropertyFilter;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -243,6 +244,11 @@ public class CooperationController {
 			cooperation.setAllianceDate(allianceDate);
 			cooperation.setVerificationState("01");
 			cooperation.setOperationUser(operationUser);
+			
+			if(StringUtils.isBlank(logoURL)) {
+				logoURL = request.getServletContext().getContextPath()+ "/images/img2/default2.png";
+			}
+			
 			cooperation.setLogoImageURL(logoURL);
 			
 			boolean resultFlag = cooperationService.cooperationSave(cooperation, country, province, city, countryText, provinceText, cityText, detailAddress);
@@ -293,6 +299,9 @@ public class CooperationController {
 			String provinceText = request.getParameter("provinceText");
 			String cityText = request.getParameter("cityText");
 			String detailAddress = request.getParameter("detailAddressText");
+			
+			String longitude = request.getParameter("longitude");
+			String latitude = request.getParameter("latitude");
 
 			String pictureUrl = saveFile(request);
 			String logoURL = saveLogoFile(request);
@@ -346,6 +355,12 @@ public class CooperationController {
 				cooperationBusiness.setTel2(tel2);
 				cooperationBusiness.setBusinessLicense(businessLicense);
 				cooperationBusiness.setAccount(account);
+				if(!StringUtils.isBlank(longitude)) {
+					cooperationBusiness.setLongitude(longitude);
+				}
+				if(!StringUtils.isBlank(latitude)) {
+					cooperationBusiness.setLatitude(latitude);
+				}
 				if(pictureUrl != null){
 					cooperationBusiness.setPictureUrl(pictureUrl);
 					
@@ -443,14 +458,14 @@ public class CooperationController {
 			MultipartFile multiFile = multipartRequest
 					.getFile("logoImageURL");
 			String cooperationId = request.getParameter("cooperationId");
-			String fileUrl =request.getServletContext().getRealPath("/") + "upload/";
+//			String fileUrl =request.getServletContext().getRealPath("/") + "upload/";
 			String viewUrl = request.getServletContext().getContextPath()+ "/upload/";
 			// 测试使用
-//			String fileUrl = "/Users/gmc/Works/eclipse/workspace/TSSA/WebContent/WEB-INF/upload/";
+			String fileUrl = "/Users/gmc/Works/eclipse/workspace/TSSA/WebContent/upload/";
 
 			File file = new File(fileUrl);
 	        if(!file.exists()){
-	        	file.mkdirs();
+	        		file.mkdirs();
 	        }
 			if (multiFile != null
 					&& (multiFile.getOriginalFilename() != null && !""

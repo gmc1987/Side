@@ -175,4 +175,14 @@ public class TSSAUtil {
 		return sb.toString();
 	}
 	
+	public static String numberFormat(int number) {
+		return String.format("%03d", number);
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(numberFormat(9));
+		System.out.println(numberFormat(23));
+		System.out.println(numberFormat(100));
+	}
+	
 }

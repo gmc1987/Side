@@ -155,4 +155,5 @@ public class BusinessCustomer implements Serializable {
 	public void setCreateUserCode(String createUserCode) {
 		this.createUserCode = createUserCode;
 	}
+
 }

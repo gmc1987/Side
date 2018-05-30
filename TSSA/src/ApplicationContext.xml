@@ -47,6 +47,7 @@
 				<value>com.tssa.sysBulletin.pojo</value>
 				<value>com.tssa.suit.pojo</value>
 				<value>com.tssa.allocateSeats.pojo</value>
+				<value>com.tssa.bisServiceModel.catering.pojo</value>
 			</list>
 	   </property>
 	</bean>

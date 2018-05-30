@@ -12,9 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mysql.jdbc.StringUtils;
 import com.tssa.common.mode.DetachedCriteriaTS;
+import com.tssa.common.mode.PageMode;
 import com.tssa.common.service.BaseBusinessService;
 import com.tssa.cooperationBusiness.dao.CooperationDao;
+import com.tssa.cooperationBusiness.dao.CooperationLocationReferenceDao;
 import com.tssa.cooperationBusiness.dao.CooperationProductTypeDao;
 import com.tssa.cooperationBusiness.pojo.CooperationBusiness;
 import com.tssa.cooperationBusiness.pojo.CooperationBusinessLocationRefence;
@@ -35,6 +38,9 @@ public class CooperationService extends
 	
 	@Autowired
 	private CooperationProductTypeDao cooperationProductTypeDao;
+	
+	@Autowired
+	private CooperationLocationReferenceDao cooperationLocationReferenceDao;
 
 	@Transactional
 	public boolean cooperationSave(CooperationBusiness cooperation,
@@ -80,8 +86,10 @@ public class CooperationService extends
 	 * @param pageSize
 	 * @return
 	 */
-	public List<CooperationBusiness> getListByProductTypeId(String productTypeId, int pageNumber, int pageSize){
+	public PageMode<CooperationBusiness> getListByProductTypeId(String productTypeId, String searchKey, int pageNumber, int pageSize){
 		List<CooperationBusiness> list = null;
+		int count = 0;
+		
 		try{
 			if(productTypeId != null && !"".equals(productTypeId)){
 				DetachedCriteriaTS<CooperationProductType> productTypecriteria = new DetachedCriteriaTS<CooperationProductType>(
@@ -92,14 +100,28 @@ public class CooperationService extends
 				
 				DetachedCriteriaTS<CooperationBusiness> criteria = new DetachedCriteriaTS<CooperationBusiness>(
 						CooperationBusiness.class);
+				DetachedCriteriaTS<CooperationBusiness> criteria2 = new DetachedCriteriaTS<CooperationBusiness>(
+						CooperationBusiness.class);
 				criteria.add(Restrictions.eq("productTypeId", productType));
+				criteria2.add(Restrictions.eq("productTypeId", productType));
+				
+				if(!StringUtils.isEmptyOrWhitespaceOnly(searchKey)) {
+					DetachedCriteriaTS<CooperationBusinessLocationRefence> locationCriteria = new DetachedCriteriaTS<CooperationBusinessLocationRefence>(
+							CooperationBusinessLocationRefence.class);
+					locationCriteria.add(Restrictions.eq("cityId", Integer.parseInt(searchKey)));
+					CooperationBusinessLocationRefence location = cooperationLocationReferenceDao.find(locationCriteria);
+					criteria.add(Restrictions.eq("locationReference", location));
+					criteria2.add(Restrictions.eq("locationReference", location));
+				}
+				
 				list = cooperationDao.find(criteria, pageNumber, pageSize);
+				count = cooperationDao.count(criteria2);
 			}else{
 				logger.info("productTypeId 为空！查询条件错误");
 			}
 		}catch(Exception e){
 			logger.error(e.getMessage(), e);
 		}
-		return list;
+		return new PageMode<CooperationBusiness>(list, pageNumber, pageSize, count);
 	}
 }

@@ -55,11 +55,13 @@ public class PageMode<T> implements Serializable {
 	/**
 	 * 第一个索引
 	 */
+	@SuppressWarnings("unused")
 	private int firstIndex;
 	
 	/**
 	 * 最后一个索引
 	 */
+	@SuppressWarnings("unused")
 	private int lastIndex;
 	
 	public PageMode(){
@@ -70,8 +72,8 @@ public class PageMode<T> implements Serializable {
 		this.count = 0;
 		this.hasNextPage = false;
 		this.hasPreviousPage = false;
-		this.firstIndex = 0;
-		this.lastIndex = 0;
+		this.firstIndex = 1;
+		this.lastIndex = 10;
 	}
 	
 	public PageMode(List<T> records, int pageNumber, int pageSize, int count){
@@ -96,6 +98,10 @@ public class PageMode<T> implements Serializable {
 			this.pageCount = 1;
 		}
 		
+		if(this.pageNumber > 1) {
+			this.pageNumber = this.pageNumber / this.pageSize + 1;
+		}
+		
 		if(this.pageNumber > this.pageCount){
 			this.pageNumber = this.pageCount;
 		}
@@ -117,7 +123,8 @@ public class PageMode<T> implements Serializable {
 		
 		this.hasNextPage = this.pageCount > this.pageNumber;
 		this.hasPreviousPage = this.pageNumber > 1;
-		
+		this.firstIndex = this.getFirstIndex();
+		this.lastIndex = this.getLastIndex();
 	}
 	
 	public PageMode(List<T> records, int pageNumber, int pageSize, int pageCount, int count, 

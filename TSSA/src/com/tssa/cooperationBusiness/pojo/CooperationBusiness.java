@@ -134,6 +134,18 @@ public class CooperationBusiness implements Serializable {
 	@Column(length=1000, nullable=true)
 	private String logoImageURL;
 	
+	/**
+	 * 经度
+	 */
+	@Column(length=100, nullable=true)
+	private String longitude;
+	
+	/**
+	 * 纬度
+	 */
+	@Column(length=100, nullable=true)
+	private String latitude;
+	
 	public String getCooperId() {
 		return cooperId;
 	}
@@ -238,6 +250,18 @@ public class CooperationBusiness implements Serializable {
 	}
 	public void setLogoImageURL(String logoImageURL) {
 		this.logoImageURL = logoImageURL;
+	}
+	public String getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+	public String getLatitude() {
+		return latitude;
+	}
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
 	}
 	
 }

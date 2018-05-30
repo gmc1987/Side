@@ -9,5 +9,5 @@ package com.tssa.common.util;
  */
 public interface Configs {
 
-	public final static String baidu_api_ak="SvnVLYEm6MoTNbx0lk4cSDAnIMlwgtZT";
+	public final static String baidu_api_ak="v5ifreGL4gF1X2z6WZfYXRprlLsNQnHG";
 }

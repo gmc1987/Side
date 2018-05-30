@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -60,6 +61,23 @@ public class CateringTable implements Serializable {
 	 */
 	@Column(length=8, nullable=false)
 	private String holdNum;
+	
+	/**
+	 * 餐桌二维码
+	 */
+	@Column(length=250, nullable=true)
+	private String qrCodeURL;
+	
+	@Transient
+	private String qz;
+	
+	@Transient
+	private String tableTypeText;
+	@Transient
+	private String statusText;
+	@Transient
+	private String qrCodeFileURL;
+	
 
 	public String getUuid() {
 		return uuid;
@@ -107,5 +125,53 @@ public class CateringTable implements Serializable {
 
 	public void setHoldNum(String holdNum) {
 		this.holdNum = holdNum;
+	}
+
+	public String getQz() {
+		return qz;
+	}
+
+	public void setQz(String qz) {
+		this.qz = qz;
+	}
+
+	public String getTableTypeText() {
+		if("0".equals(this.tableType)) {
+			tableTypeText = "小桌";
+		} else if("1".equals(this.tableType)) {
+			tableTypeText = "中桌";
+		} else {
+			tableTypeText = "大桌";
+		}
+		return tableTypeText;
+	}
+
+	public void setTableTypeText(String tableTypeText) {
+		this.tableTypeText = tableTypeText;
+	}
+
+	public String getStatusText() {
+		statusText = "0".equals(this.status) ? "可用" : "不可用";
+		return statusText;
+	}
+
+	public void setStatusText(String statusText) {
+		this.statusText = statusText;
+	}
+
+	public String getQrCodeURL() {
+		return qrCodeURL;
+	}
+
+	public void setQrCodeURL(String qrCodeURL) {
+		this.qrCodeURL = qrCodeURL;
+	}
+
+	public String getQrCodeFileURL() {
+		return qrCodeFileURL;
+	}
+
+	public void setQrCodeFileURL(String qrCodeFileURL) {
+		this.qrCodeFileURL = qrCodeFileURL;
 	}
 }

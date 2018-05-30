@@ -3,9 +3,11 @@
  */
 package com.tssa.location.service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,10 @@ import com.tssa.common.mode.DetachedCriteriaTS;
 import com.tssa.common.service.BaseBusinessService;
 import com.tssa.location.dao.LocationDao;
 import com.tssa.location.pojo.Location;
+import com.tssa.remote.locations.vo.CityVO;
+import com.tssa.remote.locations.vo.ContinentVO;
+import com.tssa.remote.locations.vo.CountryVO;
+import com.tssa.remote.locations.vo.ProvinceVO;
 
 /**
  * @author gmc
@@ -199,6 +205,111 @@ public class LocationService extends BaseBusinessService<Location> {
 		
 		cities = locationDao.find(locationCriteriaTS, 0);
 
+		return cities;
+	}
+	
+	/*------------------------转换vo对象---------------------*/
+	
+	/**
+	 * 查询所有的大洲
+	 * @return
+	 * @throws InvocationTargetException 
+	 * @throws IllegalAccessException 
+	 */
+	public List<ContinentVO> findAllContinentToVO() throws Exception {
+
+		List<ContinentVO> continenies = null;
+
+		DetachedCriteriaTS<Location> locationCriteriaTS = new DetachedCriteriaTS<Location>(
+				Location.class);
+		locationCriteriaTS.add(Restrictions.eq("ltype", "1"));
+		
+		List<Location> locations = locationDao.findAll(locationCriteriaTS);
+		
+		if(locations != null && locations.size() > 0) {
+			continenies = new ArrayList<ContinentVO>();
+			for(Location location : locations) {
+				ContinentVO continent = new ContinentVO();
+				BeanUtils.copyProperties(continent, location);
+				continenies.add(continent);
+			}
+		}
+		return continenies;
+	}
+
+	/**
+	 * 查询所有国家
+	 * @return
+	 */
+	public List<CountryVO> findAllCountryToVO() throws Exception {
+		
+		List<CountryVO> contries = null;
+		List<Location> myContries = new ArrayList<Location>();
+		
+		DetachedCriteriaTS<Location> locationCriteriaTS = new DetachedCriteriaTS<Location>(
+				Location.class);
+		locationCriteriaTS.add(Restrictions.eq("ltype", "2"));
+		
+		myContries = locationDao.findAll(locationCriteriaTS);
+		
+		if(myContries.size() > 0) {
+			contries = new ArrayList<CountryVO>();
+			for(Location myContry : myContries) {
+				CountryVO contry = new CountryVO();
+				BeanUtils.copyProperties(contry, myContry);
+				contries.add(contry);
+			}
+		}
+		
+		return contries;
+	}
+
+	/**
+	 * 查询所有省份
+	 * @return
+	 */
+	public List<ProvinceVO> findAllProvinceToVO() throws Exception {
+		
+		List<ProvinceVO> provincies = null;
+		List<Location> provincList = null;
+		DetachedCriteriaTS<Location> locationCriteriaTS = new DetachedCriteriaTS<Location>(
+				Location.class);
+		locationCriteriaTS.add(Restrictions.eq("ltype", "3"));
+		provincList = locationDao.findAll(locationCriteriaTS);
+		
+		if(provincList != null && provincList.size() > 0) {
+			provincies = new ArrayList<ProvinceVO>();
+			for(Location provincs : provincList) {
+				ProvinceVO province = new ProvinceVO();
+				BeanUtils.copyProperties(province, provincs);
+				provincies.add(province);
+			}
+		}
+		return provincies;
+	}
+
+	/**
+	 * 查询所有城市
+	 * @return
+	 */
+	public List<CityVO> findAllCityToVO() throws Exception {
+		
+		List<Location> cityList = null;
+		List<CityVO> cities = null;
+		
+		DetachedCriteriaTS<Location> locationCriteriaTS = new DetachedCriteriaTS<Location>(
+				Location.class);
+		locationCriteriaTS.add(Restrictions.eq("ltype", "4"));
+		cityList = locationDao.findAll(locationCriteriaTS);
+		
+		if(cityList != null && cityList.size() > 0) {
+			cities = new ArrayList<CityVO>();
+			for(Location city : cityList) {
+				CityVO cityVO = new CityVO();
+				BeanUtils.copyProperties(cityVO, city);
+				cities.add(cityVO);
+			}
+		}
 		return cities;
 	}
 

@@ -368,7 +368,13 @@ public class BusinessCustomerController {
 	public Map<String, Object> resetPassword(@RequestParam(value="loginId") String loginId, HttpServletRequest request){
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		
+		try {
+			businessCustomerService.businessCustomerResetPassword(loginId);
+			resultMap.put("success", true);
+			resultMap.put("msg", "重置密码成功");
+		} catch(Exception e) {
+			
+		}
 		
 		return resultMap;
 	}

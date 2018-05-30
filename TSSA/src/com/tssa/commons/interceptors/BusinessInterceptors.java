@@ -14,7 +14,8 @@ import com.tssa.businessUser.pojo.BusinessCustomer;
 
 /**
  * @author gmc
- *
+ * @see 拦截器主要用于防止未经登陆用户直接输入平台请求路径进入后台界面，
+ * 		根据用户session对象判断是否已登录平台
  */
 public class BusinessInterceptors implements HandlerInterceptor {
 

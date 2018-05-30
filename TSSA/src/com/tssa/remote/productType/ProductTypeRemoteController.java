@@ -111,19 +111,17 @@ public class ProductTypeRemoteController extends BaseController {
 			HttpServletResponse response) {
 
 		try {
-			List<ProductTypeVo> productTypes = cooperatinoProductTypeService
-					.findAllProfessionProduct();
-
+			
+			List<ProductTypeVo> productTypes = cooperatinoProductTypeService.findAllProfessionProduct();
+			
 			if (productTypes != null) {
 				JsonConfig jsonConfig = new JsonConfig();
 				// 设置javabean中日期转换时的格式
-				jsonConfig.registerJsonValueProcessor(Date.class,
-						new JsonDateValueProcessor("yyyy-MM-dd HH:mm:ss"));
-				JSONArray array = JSONArray
-						.fromObject(productTypes, jsonConfig);
-
+				jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor("yyyy-MM-dd HH:mm:ss"));
+				JSONArray array = JSONArray.fromObject(productTypes, jsonConfig);
 				responseOutStream(response, array.toString());
 			}
+			
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			Map<String, Object> result = new HashMap<String, Object>();

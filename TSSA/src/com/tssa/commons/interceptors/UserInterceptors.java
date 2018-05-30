@@ -46,25 +46,24 @@ public class UserInterceptors implements HandlerInterceptor {
 	 * 该方法将在请求处理之前进行调用
 	 * 执行action前执行
 	 */
+	@SuppressWarnings("unused")
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
 			Object arg2) throws Exception {
-		// TODO Auto-generated method stub
-		
 		BusinessCustomer businessCustomer = (BusinessCustomer)request.getSession().getAttribute("businessCustomer");
-		if(businessCustomer != null){
-			return true;
-		}
-		
-		//判断是否登陆请求
 		Users user = (Users)request.getSession().getAttribute("user");
-		if(user != null){
+		if(businessCustomer != null || user != null) {
 			return true;
+		} else if(businessCustomer == null && user != null) {
+			request.getRequestDispatcher("/login.jsp").forward(request, response);
+			return false;
+		} else if(businessCustomer != null && user == null){
+			request.getRequestDispatcher("/businessCustomerLogin.jsp").forward(request, response);
+			return false;
 		} else {
 			request.getRequestDispatcher("/login.jsp").forward(request, response);
 			return false;
 		}
-		
 	}
 
 }

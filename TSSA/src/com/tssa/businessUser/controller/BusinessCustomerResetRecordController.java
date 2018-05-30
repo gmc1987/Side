@@ -150,6 +150,9 @@ public class BusinessCustomerResetRecordController extends BaseController {
 				result.put("success", true);
 				result.put("msg", "申请重置密码成功，请等待审批重置");
 				
+			} else {
+				result.put("success", false);
+				result.put("msg", "没有找到该用户信息!");
 			}
 		}catch(Exception e){
 			result.put("success", false);

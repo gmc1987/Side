@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 /**
  * @author gmc
@@ -37,7 +38,7 @@ public class SpringUtil {
             if(logger.isDebugEnabled()) logger.debug("===================================Init Spring's ApplicationContext=========================================");  
             try  
             {  
-                factory = new ClassPathXmlApplicationContext(new String[]{"ApplicationContext.xml","ApplicationContext-bean.xml","ApplicationContext-scheduler.xml"});  
+                factory = new ClassPathXmlApplicationContext(new String[]{"classpath:/ApplicationContext.xml","classpath:/ApplicationContext-bean.xml","classpath:/ApplicationContext-scheduler.xml"});  
             }  
             catch ( Exception e1 )  
             {  

@@ -33,7 +33,7 @@ public class Location{
 	public static final Integer STATUS_NO = 0;  //不启用
 	
 	public static final Map<String,String> TYPE_INFORMATION = new LinkedHashMap<String,String>();
-	public static final Map<String,Integer> TYPEINDEX_INDORMATION = new HashMap<String,Integer>();  //区域类型顺序
+	public static final Map<String,Integer> TYPEINDEX_INDORMATION = new HashMap<String,Integer>();//区域类型顺序
 	
 	public static final String COUNTRY = "country"; //国家
 	public static final String BIGAREA = "bigArea"; //大区
