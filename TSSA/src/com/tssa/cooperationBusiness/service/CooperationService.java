@@ -109,9 +109,9 @@ public class CooperationService extends
 					DetachedCriteriaTS<CooperationBusinessLocationRefence> locationCriteria = new DetachedCriteriaTS<CooperationBusinessLocationRefence>(
 							CooperationBusinessLocationRefence.class);
 					locationCriteria.add(Restrictions.eq("cityId", Integer.parseInt(searchKey)));
-					CooperationBusinessLocationRefence location = cooperationLocationReferenceDao.find(locationCriteria);
-					criteria.add(Restrictions.eq("locationReference", location));
-					criteria2.add(Restrictions.eq("locationReference", location));
+					List<CooperationBusinessLocationRefence> locations = cooperationLocationReferenceDao.findAll(locationCriteria);
+					criteria.add(Restrictions.in("locationReference", locations));
+					criteria2.add(Restrictions.in("locationReference", locations));
 				}
 				
 				list = cooperationDao.find(criteria, pageNumber, pageSize);
