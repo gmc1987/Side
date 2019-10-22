@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.tssa.common.service.BaseBusinessService;
 import com.tssa.cooperationBusiness.pojo.CooperationBusinessProduct;
-import com.tssa.myOrders.pojo.RestaurantOrder;
 import com.tssa.myOrders.pojo.ShopOrder;
 
 /**
@@ -41,5 +40,13 @@ public class ShopOrderService extends BaseBusinessService<ShopOrder> {
 			}
 		}
 		return products;
+	}
+	
+	/**
+	 * 添加购物车
+	 * @param product
+	 */
+	public void addShopCar(CooperationBusinessProduct product) {
+		
 	}
 }

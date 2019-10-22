@@ -13,9 +13,14 @@ import com.tssa.allocateSeats.service.AllocateSeatTypeSetService;
 import com.tssa.allocateSeats.vo.AllocateSeatNumberSetVO;
 import com.tssa.common.mode.DetachedCriteriaTS;
 import com.tssa.common.util.SpringUtil;
+import com.tssa.remote.object.CustTakeNumberVO;
 
 
 public class DaoTest {
+	
+	static {
+		SpringUtil.getApplicationContext();
+	}
 
 	@Test
 	public void test() {
@@ -62,6 +67,21 @@ public class DaoTest {
 				System.out.println("vo" + vo.getTypeName() + "\n");
 				System.out.println("vo" + vo.getTypeId() + "\n");
 				System.out.println("vo" + vo.getCreateDate() + "\n");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testCase3() {
+		AllocateSeatNumberRecordService numberService = (AllocateSeatNumberRecordService) SpringUtil.getApplicationContext().getBean("allocateSeatNumberRecordService");
+		try {
+			List<CustTakeNumberVO> resultData = numberService.getCustTakeNumberDeatil("100016", 1, 5);
+			System.out.println("当前记录数:" + resultData.size());
+			for (CustTakeNumberVO custTakeNumberVO : resultData) {
+				System.out.println(custTakeNumberVO.getNumber());
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

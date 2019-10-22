@@ -27,7 +27,6 @@ public class ApkUtil
   public static final String ELEM_USES_SDK = "uses-sdk";
   public static final Namespace ANDROID_NAMESPACE = Namespace.getNamespace("http://schemas.android.com/apk/res/android");
 
-  @SuppressWarnings("null")
 public static ApkInfo getApkInfoFromFile(File file)
   {
     InputStream xmlIs = null;
@@ -40,18 +39,8 @@ public static ApkInfo getApkInfoFromFile(File file)
       xmlIs = FileUtil.xmlPrint(stream);
     } catch (IOException e) {
       e.printStackTrace();
-      try
-      {
-        stream.close();
-        zipFile.close();
-      } catch (IOException e1) {
-        e.printStackTrace();
-      }
-    }
-    finally
-    {
-      try
-      {
+    } finally {
+      try {
         stream.close();
         zipFile.close();
       } catch (IOException e) {
@@ -63,9 +52,7 @@ public static ApkInfo getApkInfoFromFile(File file)
   
   
   
-  @SuppressWarnings("null")
-public static ApkInfo getApkInfo(String apkPath)
-  {
+public static ApkInfo getApkInfo(String apkPath) {
     InputStream xmlIs = null;
     ZipFile zipFile = null;
     InputStream stream = null;
@@ -76,20 +63,12 @@ public static ApkInfo getApkInfo(String apkPath)
       xmlIs = FileUtil.xmlPrint(stream);
     } catch (IOException e) {
       e.printStackTrace();
-      try
-      {
-        stream.close();
-        zipFile.close();
-      } catch (IOException e1) {
-        e.printStackTrace();
-      }
-    }
-    finally
-    {
-      try
-      {
-        stream.close();
-        zipFile.close();
+    } finally {
+      try {
+    	  if(stream != null) {
+    		  stream.close();
+    	      zipFile.close();
+    	  }
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -99,8 +78,7 @@ public static ApkInfo getApkInfo(String apkPath)
   }
 
   @SuppressWarnings({ "unchecked", "rawtypes" })
-public static ApkInfo manifestSax(InputStream manifestStream)
-  {
+public static ApkInfo manifestSax(InputStream manifestStream){
     ApkInfo apk = new ApkInfo();
     SAXBuilder builder = new SAXBuilder();
     try {
